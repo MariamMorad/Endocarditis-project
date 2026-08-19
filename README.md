@@ -1,4 +1,5 @@
 # Clinical Decision Support RAG API — Infective Endocarditis
+Live Demo: EndoAI Clinical AI Assistant
 
 A production-grade Clinical Retrieval-Augmented Generation (RAG) API built over NICE and ESC guidelines for Infective Endocarditis.
 
