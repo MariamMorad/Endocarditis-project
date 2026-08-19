@@ -199,7 +199,7 @@
       <a href="#how-it-works" class="active">How It Works</a>
       <a href="#ask-samples">Clinical Questions</a>
       <a href="#guidelines">Medical Guidelines</a>
-      <a href="/docs" target="_blank">Swagger API</a>
+      <a href="/docs" target="_blank" class="nav-docs-link">Swagger API</a>
     </nav>
     <div style="display:flex; align-items:center; gap:10px;">
       <a href="endoai-assistant.html" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">chat_bubble</span>Open Assistant</a>
@@ -320,7 +320,7 @@
           <h3>📄 ESC 2023 Guidelines for the Management of Endocarditis</h3>
           <p>European Heart Journal (2023) — Complete 98-page clinical guideline covering diagnosis, surgery, imaging, and antimicrobials.</p>
         </div>
-        <a href="/api/v1/documents/ESC.pdf" target="_blank" class="btn btn-primary">
+        <a href="/api/v1/documents/ESC.pdf" target="_blank" data-doc="ESC.pdf" class="btn btn-primary doc-pdf-link">
           <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>View Full ESC PDF
         </a>
       </div>
@@ -329,7 +329,7 @@
           <h3>📄 NICE Clinical Guideline [CG64]</h3>
           <p>Prophylaxis against infective endocarditis in adults and children undergoing interventional procedures.</p>
         </div>
-        <a href="/api/v1/documents/NICE.pdf" target="_blank" class="btn btn-primary">
+        <a href="/api/v1/documents/NICE.pdf" target="_blank" data-doc="NICE.pdf" class="btn btn-primary doc-pdf-link">
           <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>View Full NICE PDF
         </a>
       </div>
@@ -379,13 +379,29 @@
     </a>
     <div class="footer-links">
       <a href="endoai-assistant.html">AI Assistant</a>
-      <a href="/docs" target="_blank">Swagger API</a>
-      <a href="/api/v1/documents/ESC.pdf" target="_blank">ESC.pdf</a>
-      <a href="/api/v1/documents/NICE.pdf" target="_blank">NICE.pdf</a>
+      <a href="/docs" target="_blank" class="nav-docs-link">Swagger API</a>
+      <a href="/api/v1/documents/ESC.pdf" target="_blank" data-doc="ESC.pdf" class="doc-pdf-link">ESC.pdf</a>
+      <a href="/api/v1/documents/NICE.pdf" target="_blank" data-doc="NICE.pdf" class="doc-pdf-link">NICE.pdf</a>
     </div>
     <span class="footer-copy">© 2024 EndoAI Clinical Assistant — Powered by Azure OpenAI</span>
   </div>
 </footer>
 
+<script>
+const isLocalStaticPort = window.location.port === '3000';
+const API_BASE = isLocalStaticPort 
+  ? "https://rag-backend-api.kindfield-2d55a574.germanywestcentral.azurecontainerapps.io" 
+  : window.location.origin;
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doc-pdf-link').forEach(el => {
+    const docName = el.getAttribute('data-doc') || 'ESC.pdf';
+    el.href = `${API_BASE}/api/v1/documents/${encodeURIComponent(docName)}`;
+  });
+  document.querySelectorAll('.nav-docs-link').forEach(el => {
+    el.href = `${API_BASE}/docs`;
+  });
+});
+</script>
 </body>
 </html>

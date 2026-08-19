@@ -296,17 +296,17 @@
 
   <div class="side-body custom-scrollbar">
     <div class="side-label">Original Guidelines (PDF)</div>
-    <a class="side-link" href="/api/v1/documents/ESC.pdf" target="_blank" title="View Full ESC 2023 Guidelines PDF">
+    <a class="side-link doc-pdf-link" data-doc="ESC.pdf" href="/api/v1/documents/ESC.pdf" target="_blank" title="View Full ESC 2023 Guidelines PDF">
       <span class="material-symbols-outlined" style="color:#f87171;">picture_as_pdf</span>ESC 2023 Guideline
     </a>
-    <a class="side-link" href="/api/v1/documents/NICE.pdf" target="_blank" title="View Full NICE Guidelines PDF">
+    <a class="side-link doc-pdf-link" data-doc="NICE.pdf" href="/api/v1/documents/NICE.pdf" target="_blank" title="View Full NICE Guidelines PDF">
       <span class="material-symbols-outlined" style="color:#f87171;">picture_as_pdf</span>NICE Guideline
     </a>
 
     <div class="side-label">Navigation & Admin</div>
-    <a class="side-link" href="endoai-landing.html"><span class="material-symbols-outlined">home</span>Home Page</a>
-    <a class="side-link" href="/docs" target="_blank"><span class="material-symbols-outlined">api</span>Swagger API Docs</a>
-    <a class="side-link" href="/api/v1/collections/stats" target="_blank"><span class="material-symbols-outlined">database</span>Vector Store Stats</a>
+    <a class="side-link nav-home-link" href="endoai-landing.html"><span class="material-symbols-outlined">home</span>Home Page</a>
+    <a class="side-link nav-docs-link" href="/docs" target="_blank"><span class="material-symbols-outlined">api</span>Swagger API Docs</a>
+    <a class="side-link nav-stats-link" href="/api/v1/collections/stats" target="_blank"><span class="material-symbols-outlined">database</span>Vector Store Stats</a>
   </div>
 
   <div class="side-foot">
@@ -321,8 +321,8 @@
       <div class="grounded-chip"><span class="status-dot"></span>Grounded in ESC & NICE 2023</div>
     </div>
     <div class="pdf-quick-links">
-      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn" title="Open Full ESC Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>ESC.pdf</a>
-      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn" title="Open Full NICE Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>NICE.pdf</a>
+      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="ESC.pdf" title="Open Full ESC Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>ESC.pdf</a>
+      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="NICE.pdf" title="Open Full NICE Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>NICE.pdf</a>
     </div>
   </header>
 
@@ -388,15 +388,29 @@
 </aside>
 
 <script>
-const API_BASE = window.location.origin.includes(':3000') 
-  ? "https://rag-backend-api.kindfield-2d55a574.germanywestcentral.azurecontainerapps.io"
+// Universal API Base calculation: works when deployed on Azure Container Apps or when run locally
+const isLocalStaticPort = window.location.port === '3000';
+const API_BASE = isLocalStaticPort 
+  ? "https://rag-backend-api.kindfield-2d55a574.germanywestcentral.azurecontainerapps.io" 
   : window.location.origin;
 
 const API_URL = `${API_BASE}/api/v1/ask`;
 let currentCitations = [];
 
-// Check for query param on load
-window.addEventListener('DOMContentLoaded', () => {
+// Ensure all document and swagger links point to the active backend host
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doc-pdf-link').forEach(el => {
+    const docName = el.getAttribute('data-doc') || 'ESC.pdf';
+    el.href = `${API_BASE}/api/v1/documents/${encodeURIComponent(docName)}`;
+  });
+  document.querySelectorAll('.nav-docs-link').forEach(el => {
+    el.href = `${API_BASE}/docs`;
+  });
+  document.querySelectorAll('.nav-stats-link').forEach(el => {
+    el.href = `${API_BASE}/api/v1/collections/stats`;
+  });
+
+  // Check for query param on load
   const urlParams = new URLSearchParams(window.location.search);
   const q = urlParams.get('q');
   if (q) {
@@ -418,7 +432,7 @@ function askPreset(text) {
 }
 
 function resetChat() {
-  window.location.href = 'endoai-assistant.html';
+  window.location.href = window.location.pathname.split('?')[0];
 }
 
 function closeDrawer() {
