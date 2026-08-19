@@ -62,24 +62,8 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api/v1")
 
-# Mount frontend directory for static assets (images, html)
+# Frontend Directory
 FRONT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "front")
-if os.path.exists(FRONT_DIR):
-    app.mount("/front", StaticFiles(directory=FRONT_DIR, html=True), name="front")
-
-
-@app.get("/", tags=["01 - Health & Meta"], summary="EndoAI Home Web Page")
-def root():
-    """Serves the interactive EndoAI Landing Page directly on Azure root URL."""
-    landing_path = os.path.join(FRONT_DIR, "endoai-landing.html")
-    if os.path.exists(landing_path):
-        return FileResponse(landing_path)
-    return {
-        "message": "Clinical RAG API is running.",
-        "docs": "/docs",
-        "openapi": "/openapi.json",
-        "version": "1.0.0",
-    }
 
 
 @app.get("/assistant", tags=["01 - Health & Meta"], summary="EndoAI Assistant Web App")
@@ -89,3 +73,8 @@ def assistant():
     if os.path.exists(assistant_path):
         return FileResponse(assistant_path)
     return FileResponse(os.path.join(FRONT_DIR, "index.html"))
+
+
+# Mount frontend static files at root / so all assets (HTML, PNG, CSS) load without 404
+if os.path.exists(FRONT_DIR):
+    app.mount("/", StaticFiles(directory=FRONT_DIR, html=True), name="front_static")

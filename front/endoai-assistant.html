@@ -10,26 +10,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
   :root{
-    --bg:#faf9f6;
+    --bg:#f8faf9;
     --surface:#ffffff;
-    --surface-soft:#f2f4f1;
-    --surface-sunk:#eef1ed;
-    --ink:#152420;
-    --ink-soft:#5c6b64;
-    --ink-faint:#8a978f;
+    --surface-soft:#f1f5f3;
+    --surface-sunk:#eaf0ed;
+    --ink:#11221e;
+    --ink-soft:#4d5f57;
+    --ink-faint:#7d8f87;
     --primary:#0f3d3e;
-    --primary-deep:#0a2a2b;
-    --accent:#2e9e8f;
-    --accent-soft:#e2f2ee;
-    --accent-strong:#1f7a6d;
-    --line:#e6e8e2;
-    --line-soft:#eef0eb;
+    --primary-deep:#082223;
+    --accent:#1f8e7d;
+    --accent-soft:#e1f4f0;
+    --accent-strong:#136558;
+    --line:#e2e9e5;
+    --line-soft:#ebf1ee;
     --warn:#b54b3c;
-    --warn-soft:#f7e6e1;
+    --warn-soft:#fdf0ed;
     --radius:16px;
     --radius-sm:10px;
-    --shadow-1:0 1px 2px rgba(15,30,25,.04), 0 2px 8px rgba(15,30,25,.04);
-    --shadow-2:0 4px 16px rgba(15,30,25,.06), 0 1px 3px rgba(15,30,25,.06);
+    --shadow-1:0 1px 3px rgba(15,30,25,.06), 0 2px 8px rgba(15,30,25,.04);
+    --shadow-2:0 6px 20px rgba(15,30,25,.08), 0 2px 6px rgba(15,30,25,.04);
     --ease:cubic-bezier(.22,.61,.36,1);
   }
   *{box-sizing:border-box;}
@@ -52,17 +52,17 @@
     align-items:center; justify-content:space-between; height:60px;
     padding:0 16px; background:var(--surface); border-bottom:1px solid var(--line);
   }
-  .brand{display:flex; align-items:center; gap:10px;}
-  .brand-mark{
-    width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
-    background:#fff; border:1px solid var(--line); flex-shrink:0; box-shadow:var(--shadow-1); padding:5px;
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .logo-box{
+    width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    color:#fff; flex-shrink:0; box-shadow:var(--shadow-1);
   }
-  .brand-mark img{width:100%; height:100%; object-fit:contain;}
   .brand-name{font-weight:700; font-size:16px; letter-spacing:-.01em; color:var(--primary);}
   .icon-btn{
     border:none; background:transparent; color:var(--ink-soft); cursor:pointer;
     width:36px; height:36px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;
-    transition:background .18s var(--ease), color .18s var(--ease);
+    transition:background .18s var(--ease), color .18s var(--ease); text-decoration:none;
   }
   .icon-btn:hover{background:var(--surface-soft); color:var(--primary);}
 
@@ -74,38 +74,32 @@
   }
   .side-head{padding:24px 20px 18px; border-bottom:1px solid rgba(255,255,255,.08);}
   .side-brand{display:flex; align-items:center; gap:12px; text-decoration:none;}
-  .side-brand-mark{
-    width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center;
-    background:#fff; flex-shrink:0; padding:6px; box-shadow:var(--shadow-1);
-  }
-  .side-brand-mark img{width:100%; height:100%; object-fit:contain;}
   .side-title{color:#fff; font-weight:700; font-size:17px; letter-spacing:-.01em;}
-  .side-sub{color:rgba(255,255,255,.5); font-size:11.5px; margin-top:1px;}
+  .side-sub{color:rgba(255,255,255,.55); font-size:11.5px; margin-top:1px;}
   .new-consult{
     margin-top:16px; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
     background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:11px;
     font-weight:600; font-size:13px; cursor:pointer; transition:background .18s var(--ease), transform .12s var(--ease);
   }
   .new-consult:hover{background:var(--accent-strong); transform:translateY(-1px);}
-  .new-consult:active{transform:translateY(0);}
 
   .side-body{flex:1; overflow-y:auto; padding:18px 0;}
   .side-label{
     padding:0 20px 8px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.12em;
-    color:rgba(255,255,255,.35); text-transform:uppercase; margin-top:14px;
+    color:rgba(255,255,255,.4); text-transform:uppercase; margin-top:14px;
   }
   .side-label:first-child{margin-top:0;}
   .side-link{
     display:flex; align-items:center; gap:12px; padding:10px 20px; margin:1px 10px; border-radius:10px;
-    color:rgba(255,255,255,.7); text-decoration:none; font-size:13.5px; font-weight:500;
+    color:rgba(255,255,255,.75); text-decoration:none; font-size:13.5px; font-weight:500;
     transition:background .18s var(--ease), color .18s var(--ease);
   }
   .side-link .material-symbols-outlined{font-size:19px;}
   .side-link:hover{background:rgba(255,255,255,.08); color:#fff;}
-  .side-link.active{background:rgba(255,255,255,.12); color:#fff; box-shadow:inset 3px 0 0 var(--accent);}
+  .side-link.active{background:rgba(255,255,255,.14); color:#fff; box-shadow:inset 3px 0 0 var(--accent);}
 
   .side-foot{padding:16px 20px; border-top:1px solid rgba(255,255,255,.08);}
-  .status-pill{display:flex; align-items:center; gap:9px; color:rgba(255,255,255,.7); font-size:12px;}
+  .status-pill{display:flex; align-items:center; gap:9px; color:rgba(255,255,255,.75); font-size:12px;}
   .status-dot{width:7px; height:7px; border-radius:50%; background:#4ade80; box-shadow:0 0 0 3px rgba(74,222,128,.18); animation:pulse 2.2s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.45;}}
 
@@ -116,12 +110,12 @@
     display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0;
   }
   .head-left{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
-  .head-title{font-family:'Geist',sans-serif; font-weight:600; font-size:18px; letter-spacing:-.01em; color:var(--ink);}
+  .head-title{font-family:'Geist',sans-serif; font-weight:600; font-size:17.5px; letter-spacing:-.01em; color:var(--ink);}
   .grounded-chip{
     display:flex; align-items:center; gap:7px; padding:5px 11px; background:var(--accent-soft);
-    border:1px solid rgba(46,158,143,.25); border-radius:999px; font-size:11px; color:var(--accent-strong); font-weight:600;
+    border:1px solid rgba(31,142,125,.25); border-radius:999px; font-size:11px; color:var(--accent-strong); font-weight:600;
   }
-  .grounded-chip .status-dot{background:var(--accent-strong); box-shadow:0 0 0 3px rgba(31,122,109,.16);}
+  .grounded-chip .status-dot{background:var(--accent-strong); box-shadow:0 0 0 3px rgba(19,101,88,.16);}
 
   .pdf-quick-links{display:flex; align-items:center; gap:8px;}
   .pdf-btn{
@@ -131,91 +125,107 @@
   }
   .pdf-btn:hover{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong);}
 
-  .chat-scroll{flex:1; overflow-y:auto; padding:28px 24px 160px;}
-  .chat-inner{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:22px;}
+  .chat-scroll{flex:1; overflow-y:auto; padding:24px 24px 170px;}
+  .chat-inner{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:20px;}
 
-  .msg-row{display:flex; animation:rise .35s var(--ease) both;}
-  @keyframes rise{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .msg-row{display:flex; animation:rise .3s var(--ease) both;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
   .msg-user{justify-content:flex-end;}
   .bubble-user{
     background:var(--surface-soft); color:var(--ink); border-radius:18px 18px 4px 18px;
-    padding:13px 17px; max-width:78%; font-size:14.5px; line-height:1.55; box-shadow:var(--shadow-1);
+    padding:13px 18px; max-width:80%; font-size:14.5px; line-height:1.55; box-shadow:var(--shadow-1);
+    border:1px solid var(--line);
   }
 
-  .msg-ai{display:flex; gap:14px; max-width:92%; width:100%;}
+  .msg-ai{display:flex; gap:14px; max-width:95%; width:100%;}
   .avatar{
-    width:34px; height:34px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-    background:#fff; border:1px solid var(--line); box-shadow:var(--shadow-1); padding:5px;
+    width:36px; height:36px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    color:#fff; box-shadow:var(--shadow-1);
   }
-  .avatar img{width:100%; height:100%; object-fit:contain;}
   .ai-card{
-    background:var(--surface); border-radius:6px 18px 18px 18px; padding:20px 22px 18px; flex:1;
-    box-shadow:var(--shadow-2); border:1px solid var(--line-soft); position:relative; overflow:hidden;
+    background:var(--surface); border-radius:6px 18px 18px 18px; padding:22px 24px; flex:1;
+    box-shadow:var(--shadow-2); border:1px solid var(--line); position:relative; overflow:hidden;
   }
-  .ai-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--accent),var(--accent-strong));}
+  .ai-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3.5px; background:linear-gradient(180deg,var(--accent),var(--accent-strong));}
   .ai-kicker{
     display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; font-family:'Geist Mono',monospace;
-    font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-strong); font-weight:600;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-strong); font-weight:700;
   }
   .badge-conf{
-    padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    padding:3px 9px; border-radius:6px; font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
   }
-  .badge-high{background:#dcfce7; color:#15803d;}
-  .badge-warn{background:var(--warn-soft); color:var(--warn);}
+  .badge-high{background:#dcfce7; color:#15803d; border:1px solid rgba(21,128,61,.2);}
+  .badge-warn{background:var(--warn-soft); color:var(--warn); border:1px solid rgba(181,75,60,.2);}
   
-  .ai-body p{margin:0 0 12px; font-size:14.5px; line-height:1.65; color:var(--ink);}
-  .ai-body h4{font-family:'Geist',sans-serif; font-size:14.5px; font-weight:600; color:var(--primary); margin:14px 0 6px;}
-  .ai-body ul{margin:0 0 14px; padding-left:20px; display:flex; flex-direction:column; gap:6px;}
-  .ai-body li{font-size:14px; line-height:1.55; color:var(--ink-soft);}
-  .ai-body li strong{color:var(--ink);}
+  .ai-recommendation{
+    font-size:15px; line-height:1.7; color:var(--ink); font-weight:500; margin-bottom:14px;
+  }
+  .ai-findings-title{
+    font-family:'Geist',sans-serif; font-size:14px; font-weight:700; color:var(--primary); margin:16px 0 8px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .ai-findings-list{
+    margin:0 0 16px; padding-left:20px; display:flex; flex-direction:column; gap:8px;
+  }
+  .ai-findings-list li{font-size:14px; line-height:1.6; color:var(--ink-soft);}
 
-  .refs{margin-top:16px; padding-top:14px; border-top:1px solid var(--line-soft);}
-  .refs-label{display:block; margin-bottom:9px; font-size:11.5px; color:var(--ink-faint); font-weight:600;}
+  .refs{margin-top:16px; padding-top:14px; border-top:1px solid var(--line);}
+  .refs-label{display:block; margin-bottom:9px; font-size:11.5px; color:var(--ink-faint); font-weight:700; letter-spacing:.04em; text-transform:uppercase;}
   .ref-chip{
     display:inline-flex; align-items:center; gap:8px; background:var(--surface-soft); border:1px solid var(--line);
-    border-radius:9px; padding:7px 12px; margin:0 8px 8px 0; cursor:pointer;
-    transition:border-color .15s var(--ease), background .15s var(--ease);
+    border-radius:8px; padding:7px 12px; margin:0 8px 8px 0; cursor:pointer;
+    transition:border-color .15s var(--ease), background .15s var(--ease), transform .1s;
   }
-  .ref-chip:hover{background:var(--accent-soft); border-color:rgba(46,158,143,.35);}
+  .ref-chip:hover{background:var(--accent-soft); border-color:var(--accent); transform:translateY(-1px);}
   .ref-num{
-    font-family:'Geist Mono',monospace; font-size:10px; color:var(--accent-strong); background:rgba(46,158,143,.14);
+    font-family:'Geist Mono',monospace; font-size:10.5px; color:var(--accent-strong); background:rgba(31,142,125,.14);
     padding:2px 6px; border-radius:5px; font-weight:700;
   }
-  .ref-text{font-size:12.5px; font-weight:500; color:var(--ink);}
+  .ref-text{font-size:12.5px; font-weight:600; color:var(--ink);}
 
   .disclaimer-ai{
-    margin-top:12px; font-size:11px; color:var(--ink-faint); font-style:italic; border-top:1px dashed var(--line); padding-top:8px;
+    margin-top:14px; font-size:11px; color:var(--ink-faint); font-style:italic; border-top:1px dashed var(--line); padding-top:8px;
   }
 
   /* Refusal Card */
-  .refusal-card{background:#fff8f6; border:1px solid rgba(181,75,60,.2); border-radius:14px; padding:16px;}
-  .refusal-card h4{color:var(--warn); margin:0 0 6px; font-size:14px;}
-  .refusal-card p{color:var(--ink-soft); font-size:13px; line-height:1.5; margin:0 0 8px;}
+  .refusal-card{background:#fff8f6; border:1px solid rgba(181,75,60,.25); border-radius:12px; padding:16px; margin-top:8px;}
+  .refusal-card h4{color:var(--warn); margin:0 0 6px; font-size:14px; font-weight:700;}
+  .refusal-card p{color:var(--ink-soft); font-size:13.5px; line-height:1.6; margin:0 0 8px;}
   .nearby-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
-  .nearby-tag{background:var(--surface); border:1px solid var(--line); padding:4px 9px; border-radius:6px; font-size:11.5px; color:var(--ink);}
+  .nearby-tag{background:var(--surface); border:1px solid var(--line); padding:4px 10px; border-radius:6px; font-size:11.5px; color:var(--ink); font-weight:500;}
 
   /* Loading animation */
-  .typing-card{display:flex; align-items:center; gap:8px; color:var(--ink-soft); font-size:13px;}
+  .typing-card{display:flex; align-items:center; gap:10px; color:var(--ink-soft); font-size:13.5px; padding:6px 0;}
   .typing-dots{display:flex; gap:4px;}
   .typing-dots span{width:6px; height:6px; background:var(--accent); border-radius:50%; animation:bounce 1.4s infinite ease-in-out both;}
   .typing-dots span:nth-child(1){animation-delay:-0.32s;}
   .typing-dots span:nth-child(2){animation-delay:-0.16s;}
   @keyframes bounce{0%,80%,100%{transform:scale(0);} 40%{transform:scale(1.0);}}
 
-  /* Composer */
+  /* Composer & Suggestion Chips */
   .composer-wrap{
-    position:absolute; bottom:0; left:0; right:0; padding:28px 24px 22px;
-    background:linear-gradient(180deg, rgba(250,249,246,0) 0%, var(--bg) 45%);
+    position:absolute; bottom:0; left:0; right:0; padding:16px 24px 18px;
+    background:linear-gradient(180deg, rgba(248,250,249,0) 0%, var(--bg) 35%);
   }
-  .composer-inner{max-width:760px; margin:0 auto;}
+  .composer-inner{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
+  
+  .suggestion-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:2px;}
+  .sug-chip{
+    display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line);
+    padding:6px 12px; border-radius:999px; font-size:12px; color:var(--ink-soft); cursor:pointer; white-space:nowrap;
+    transition:background .15s, border-color .15s, color .15s;
+  }
+  .sug-chip:hover{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong);}
+
   .composer{
     background:var(--surface); border-radius:18px; border:1px solid var(--line);
-    box-shadow:0 8px 24px rgba(15,30,25,.07); transition:border-color .18s var(--ease), box-shadow .18s var(--ease);
+    box-shadow:0 6px 24px rgba(15,30,25,.07); transition:border-color .18s var(--ease), box-shadow .18s var(--ease);
   }
-  .composer:focus-within{border-color:var(--accent); box-shadow:0 8px 24px rgba(15,30,25,.09), 0 0 0 3px rgba(46,158,143,.13);}
-  .composer-row{display:flex; align-items:center; gap:6px; padding:8px;}
+  .composer:focus-within{border-color:var(--accent); box-shadow:0 8px 24px rgba(15,30,25,.10), 0 0 0 3px rgba(31,142,125,.12);}
+  .composer-row{display:flex; align-items:center; gap:6px; padding:8px 10px;}
   .composer textarea{
-    flex:1; border:none; outline:none; resize:none; background:transparent; padding:11px 12px;
+    flex:1; border:none; outline:none; resize:none; background:transparent; padding:10px 10px;
     font-family:'Inter',sans-serif; font-size:14.5px; color:var(--ink); line-height:1.5; max-height:120px;
   }
   .composer textarea::placeholder{color:var(--ink-faint);}
@@ -225,27 +235,27 @@
     transition:background .18s var(--ease), transform .12s var(--ease);
   }
   .send-btn:hover{background:var(--accent-strong); transform:translateY(-1px) scale(1.03);}
-  .disclaimer{text-align:center; margin-top:10px; font-size:11px; color:var(--ink-faint);}
+  .disclaimer{text-align:center; margin:0; font-size:11px; color:var(--ink-faint);}
 
   /* Source drawer */
   aside.drawer{
-    display:none; flex-direction:column; width:360px; position:fixed; right:0; top:0; height:100%; z-index:100;
-    background:var(--surface); border-left:1px solid var(--line); box-shadow:-6px 0 24px rgba(15,30,25,.08);
+    display:none; flex-direction:column; width:380px; position:fixed; right:0; top:0; height:100%; z-index:100;
+    background:var(--surface); border-left:1px solid var(--line); box-shadow:-8px 0 28px rgba(15,30,25,.08);
   }
   aside.drawer.open{display:flex;}
   .drawer-head{padding:20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;}
-  .drawer-title{font-family:'Geist',sans-serif; font-weight:600; font-size:15px; color:var(--ink);}
-  .drawer-body{padding:18px; flex:1; overflow-y:auto;}
+  .drawer-title{font-family:'Geist',sans-serif; font-weight:700; font-size:15.5px; color:var(--primary);}
+  .drawer-body{padding:20px; flex:1; overflow-y:auto;}
   .doc-tag{display:flex; align-items:center; gap:8px; color:var(--accent-strong); margin-bottom:4px;}
-  .doc-name{font-size:13.5px; font-weight:700; color:var(--ink);}
-  .doc-meta{font-size:11.5px; color:var(--ink-faint); margin-bottom:14px;}
-  .passage{background:var(--surface-sunk); border:1px solid var(--line); border-radius:13px; padding:15px; margin-bottom:16px;}
-  .passage-label{display:block; margin-bottom:8px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);}
-  .passage p{margin:0; font-size:13px; line-height:1.7; color:var(--ink-soft); font-style:italic;}
+  .doc-name{font-size:14px; font-weight:700; color:var(--ink);}
+  .doc-meta{font-size:12px; color:var(--ink-faint); margin-bottom:16px;}
+  .passage{background:var(--surface-sunk); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:18px;}
+  .passage-label{display:block; margin-bottom:8px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); font-weight:700;}
+  .passage p{margin:0; font-size:13.5px; line-height:1.75; color:var(--ink-soft); font-style:italic;}
   .open-pdf-action{
     display:flex; align-items:center; justify-content:center; gap:8px; background:var(--primary); color:#fff;
-    padding:11px 16px; border-radius:10px; font-size:13px; font-weight:600; text-decoration:none;
-    transition:background .15s;
+    padding:12px 16px; border-radius:10px; font-size:13.5px; font-weight:600; text-decoration:none;
+    transition:background .15s; box-shadow:var(--shadow-1);
   }
   .open-pdf-action:hover{background:var(--primary-deep);}
 
@@ -265,20 +275,20 @@
 <body>
 
 <header class="topbar">
-  <div class="brand">
-    <div class="brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+  <a href="endoai-landing.html" class="brand">
+    <div class="logo-box"><span class="material-symbols-outlined" style="font-size:20px;">cardiology</span></div>
     <span class="brand-name font-display">EndoAI</span>
-  </div>
+  </a>
   <a href="endoai-landing.html" class="icon-btn" title="Back to Home"><span class="material-symbols-outlined">home</span></a>
 </header>
 
 <nav class="sidenav">
   <div class="side-head">
     <a href="endoai-landing.html" class="side-brand">
-      <div class="side-brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div class="logo-box"><span class="material-symbols-outlined" style="font-size:22px;">cardiology</span></div>
       <div>
         <div class="side-title font-display">EndoAI</div>
-        <div class="side-sub">Clinical Assistant</div>
+        <div class="side-sub">Clinical AI Assistant</div>
       </div>
     </a>
     <button class="new-consult" onclick="resetChat()"><span class="material-symbols-outlined" style="font-size:17px;">add</span>New Consultation</button>
@@ -296,7 +306,7 @@
     <div class="side-label">Navigation & Admin</div>
     <a class="side-link" href="endoai-landing.html"><span class="material-symbols-outlined">home</span>Home Page</a>
     <a class="side-link" href="/docs" target="_blank"><span class="material-symbols-outlined">api</span>Swagger API Docs</a>
-    <a class="side-link" href="/api/v1/collections/stats" target="_blank"><span class="material-symbols-outlined">database</span>Chroma DB Stats</a>
+    <a class="side-link" href="/api/v1/collections/stats" target="_blank"><span class="material-symbols-outlined">database</span>Vector Store Stats</a>
   </div>
 
   <div class="side-foot">
@@ -307,12 +317,12 @@
 <main class="main">
   <header class="chat-head">
     <div class="head-left">
-      <h2 class="head-title">Infective Endocarditis AI Assistant</h2>
-      <div class="grounded-chip"><span class="status-dot"></span>Grounded in ESC & NICE Guidelines</div>
+      <h2 class="head-title">Infective Endocarditis Assistant</h2>
+      <div class="grounded-chip"><span class="status-dot"></span>Grounded in ESC & NICE 2023</div>
     </div>
     <div class="pdf-quick-links">
-      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn" title="Open ESC Guidelines PDF"><span class="material-symbols-outlined" style="font-size:16px;">download</span>ESC.pdf</a>
-      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn" title="Open NICE Guidelines PDF"><span class="material-symbols-outlined" style="font-size:16px;">download</span>NICE.pdf</a>
+      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn" title="Open Full ESC Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>ESC.pdf</a>
+      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn" title="Open Full NICE Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>NICE.pdf</a>
     </div>
   </header>
 
@@ -322,12 +332,14 @@
       <!-- Welcome Message -->
       <div class="msg-row">
         <div class="msg-ai">
-          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
           <div class="ai-card">
             <div class="ai-kicker">Clinical AI Assistant</div>
-            <div class="ai-body">
-              <p>Welcome to <strong>EndoAI</strong>. I am your clinical reasoning assistant for Infective Endocarditis, grounded strictly in the <strong>ESC and NICE Clinical Guidelines</strong>.</p>
-              <p style="margin-bottom:0;">You can ask any clinical question, or directly access and download the raw guideline PDFs using the links in the sidebar.</p>
+            <div class="ai-recommendation">
+              Welcome to <strong>EndoAI</strong>. I am your clinical reasoning assistant for Infective Endocarditis, grounded strictly in the official <strong>ESC 2023 and NICE Clinical Guidelines</strong>.
+            </div>
+            <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.6;">
+              You can ask any question regarding diagnostic criteria, blood culture protocols, antibiotic prophylaxis, or urgent surgical indications. Every response includes page-level citations that link directly to the original PDF guidelines.
             </div>
           </div>
         </div>
@@ -338,13 +350,29 @@
 
   <div class="composer-wrap">
     <div class="composer-inner">
+      <!-- Quick Suggestion Chips -->
+      <div class="suggestion-row custom-scrollbar">
+        <button class="sug-chip" onclick="askPreset('What are the main diagnostic criteria for infective endocarditis according to ESC guidelines?')">
+          <span class="material-symbols-outlined" style="font-size:14px;">stethoscope</span>ESC Diagnostic Criteria
+        </button>
+        <button class="sug-chip" onclick="askPreset('Why did NICE move away from routine antibiotic prophylaxis for infective endocarditis?')">
+          <span class="material-symbols-outlined" style="font-size:14px;">medication</span>NICE Prophylaxis Decision
+        </button>
+        <button class="sug-chip" onclick="askPreset('What are the indications for urgent surgery in infective endocarditis according to ESC guidelines?')">
+          <span class="material-symbols-outlined" style="font-size:14px;">emergency</span>Urgent Surgery Indications
+        </button>
+        <button class="sug-chip" onclick="askPreset('What are the recommended blood culture sampling protocols for suspected endocarditis?')">
+          <span class="material-symbols-outlined" style="font-size:14px;">science</span>Blood Culture Protocols
+        </button>
+      </div>
+
       <div class="composer">
         <div class="composer-row">
-          <textarea id="questionInput" placeholder="Ask anything about infective endocarditis (e.g. diagnostic criteria, dental prophylaxis, urgent surgery)..." rows="1" onkeydown="handleKey(event)"></textarea>
+          <textarea id="questionInput" placeholder="Ask a clinical question about infective endocarditis..." rows="1" onkeydown="handleKey(event)"></textarea>
           <button class="send-btn" id="sendBtn" onclick="sendQuestion()" title="Send Question"><span class="material-symbols-outlined" style="font-size:19px;">send</span></button>
         </div>
       </div>
-      <p class="disclaimer">Answers are strictly grounded in medical guidelines via Azure OpenAI o4-mini. Verify clinical information.</p>
+      <p class="disclaimer">Answers are strictly generated and citation-verified via Azure OpenAI o4-mini. For decision-support only.</p>
     </div>
   </div>
 </main>
@@ -360,7 +388,6 @@
 </aside>
 
 <script>
-// Use relative API URL so it automatically works on Azure and Localhost
 const API_BASE = window.location.origin.includes(':3000') 
   ? "https://rag-backend-api.kindfield-2d55a574.germanywestcentral.azurecontainerapps.io"
   : window.location.origin;
@@ -385,6 +412,11 @@ function handleKey(e) {
   }
 }
 
+function askPreset(text) {
+  document.getElementById('questionInput').value = text;
+  sendQuestion();
+}
+
 function resetChat() {
   window.location.href = 'endoai-assistant.html';
 }
@@ -401,17 +433,17 @@ function openCitation(index) {
 
   drawerBody.innerHTML = `
     <div class="doc-tag">
-      <span class="material-symbols-outlined" style="font-size:17px; color:#f87171;">picture_as_pdf</span>
-      <span class="doc-name">${cite.document || 'Clinical Guideline'}</span>
+      <span class="material-symbols-outlined" style="font-size:18px; color:#f87171;">picture_as_pdf</span>
+      <span class="doc-name">${escapeHtml(cite.document || 'Clinical Guideline')}</span>
     </div>
-    <div class="doc-meta">Page ${cite.page || '—'} · Section: ${cite.section || 'General'} · Retrieval Score: ${(cite.retrieval_score ? cite.retrieval_score.toFixed(3) : '1.0')}</div>
+    <div class="doc-meta">Page ${cite.page || '—'} · Section: ${escapeHtml(cite.section || 'General')} · Retrieval Match: ${(cite.retrieval_score ? (cite.retrieval_score * 100).toFixed(1) + '%' : '100%')}</div>
     <div class="passage">
       <span class="passage-label">Retrieved Guideline Excerpt</span>
-      <p>"${cite.excerpt || 'Excerpt passage from guideline.'}"</p>
+      <p>"${escapeHtml(cite.excerpt || 'Excerpt passage from guideline.')}"</p>
     </div>
     <a href="${pdfUrl}" target="_blank" class="open-pdf-action">
       <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
-      Open Full ${cite.document || 'Guideline'} (Page ${cite.page || 1})
+      Open Full ${escapeHtml(cite.document || 'Guideline')} (Page ${cite.page || 1})
     </a>
   `;
   document.getElementById('sourceDrawer').classList.add('open');
@@ -437,7 +469,7 @@ async function sendQuestion() {
   loadingRow.id = 'loadingMsg';
   loadingRow.innerHTML = `
     <div class="msg-ai">
-      <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
       <div class="ai-card">
         <div class="typing-card">
           <div class="typing-dots"><span></span><span></span><span></span></div>
@@ -466,15 +498,15 @@ async function sendQuestion() {
       // Refusal Card (Safety & Out-of-scope guardrail)
       aiRow.innerHTML = `
         <div class="msg-ai">
-          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
           <div class="ai-card">
             <div class="ai-kicker">
               <span>Safety & Evidence Guardrail</span>
               <span class="badge-conf badge-warn">${escapeHtml(data.confidence || 'Insufficient Evidence')}</span>
             </div>
             <div class="refusal-card">
-              <h4>${escapeHtml(data.message || 'No direct evidence found in guidelines')}</h4>
-              <p><strong>Reason:</strong> ${escapeHtml(data.evidence_gap || 'Specific guidance is not explicitly stated in the retrieved sections.')}</p>
+              <h4>${escapeHtml(data.message || 'Evidence not sufficient in guideline chunks')}</h4>
+              <p><strong>Evidence Gap:</strong> ${escapeHtml(data.evidence_gap || 'Specific guidance is not explicitly stated in the retrieved sections.')}</p>
               ${data.evidence_found_nearby && data.evidence_found_nearby.length ? `
                 <div style="font-size:11.5px; color:var(--ink-faint); margin-top:8px;">Related sections located in document:</div>
                 <div class="nearby-tags">
@@ -494,8 +526,8 @@ async function sendQuestion() {
       let claimsHtml = '';
       if (data.supporting_evidence && data.supporting_evidence.length) {
         claimsHtml = `
-          <h4>Key Clinical Findings</h4>
-          <ul>
+          <div class="ai-findings-title"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">check_circle</span>Key Clinical Evidence</div>
+          <ul class="ai-findings-list">
             ${data.supporting_evidence.map(e => `<li>${escapeHtml(e.claim)}</li>`).join('')}
           </ul>
         `;
@@ -518,16 +550,16 @@ async function sendQuestion() {
 
       aiRow.innerHTML = `
         <div class="msg-ai">
-          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
           <div class="ai-card">
             <div class="ai-kicker">
               <span>Grounded Clinical Recommendation</span>
               <span class="badge-conf ${confBadgeClass}">Confidence: ${escapeHtml(conf)}</span>
             </div>
-            <div class="ai-body">
-              <p>${escapeHtml(data.recommendation)}</p>
-              ${claimsHtml}
+            <div class="ai-recommendation">
+              ${escapeHtml(data.recommendation)}
             </div>
+            ${claimsHtml}
             ${citationsHtml}
             ${data.safety_disclaimer ? `<div class="disclaimer-ai">${escapeHtml(data.safety_disclaimer)}</div>` : ''}
           </div>
@@ -544,7 +576,7 @@ async function sendQuestion() {
     errorRow.className = 'msg-row';
     errorRow.innerHTML = `
       <div class="msg-ai">
-        <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+        <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
         <div class="ai-card">
           <div class="refusal-card">
             <h4>Connection Error</h4>

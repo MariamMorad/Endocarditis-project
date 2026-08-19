@@ -10,22 +10,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
   :root{
-    --bg:#faf9f6;
+    --bg:#f8faf9;
     --surface:#ffffff;
-    --surface-soft:#f2f4f1;
-    --ink:#152420;
-    --ink-soft:#5c6b64;
-    --ink-faint:#8a978f;
+    --surface-soft:#f1f5f3;
+    --ink:#11221e;
+    --ink-soft:#4d5f57;
+    --ink-faint:#7d8f87;
     --primary:#0f3d3e;
-    --primary-deep:#0a2a2b;
-    --accent:#2e9e8f;
-    --accent-soft:#e2f2ee;
-    --accent-strong:#1f7a6d;
-    --line:#e6e8e2;
+    --primary-deep:#082223;
+    --accent:#1f8e7d;
+    --accent-soft:#e1f4f0;
+    --accent-strong:#136558;
+    --line:#e2e9e5;
     --warn:#b54b3c;
-    --warn-soft:#f7e6e1;
-    --shadow-1:0 1px 2px rgba(15,30,25,.04), 0 2px 8px rgba(15,30,25,.04);
-    --shadow-2:0 10px 30px rgba(15,30,25,.07);
+    --warn-soft:#fdf0ed;
+    --shadow-1:0 1px 3px rgba(15,30,25,.06), 0 2px 8px rgba(15,30,25,.04);
+    --shadow-2:0 10px 30px rgba(15,30,25,.08);
     --ease:cubic-bezier(.22,.61,.36,1);
   }
   *{box-sizing:border-box;}
@@ -41,17 +41,17 @@
 
   header.top{
     position:fixed; top:0; left:0; right:0; z-index:50; height:68px;
-    background:rgba(250,249,246,.85); backdrop-filter:blur(10px);
+    background:rgba(248,250,249,.9); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line); display:flex; align-items:center;
   }
   .top-inner{max-width:1200px; margin:0 auto; padding:0 24px; width:100%; display:flex; align-items:center; justify-content:space-between;}
   .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
-  .brand-mark{
-    width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center;
-    background:#fff; border:1px solid var(--line); box-shadow:var(--shadow-1); padding:5px;
+  .logo-box{
+    width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    color:#fff; flex-shrink:0; box-shadow:var(--shadow-1);
   }
-  .brand-mark img{width:100%; height:100%; object-fit:contain;}
-  .brand-name{font-weight:700; font-size:17px; color:var(--primary); letter-spacing:-.01em;}
+  .brand-name{font-weight:700; font-size:18px; color:var(--primary); letter-spacing:-.01em;}
   nav.links{display:none; align-items:center; gap:32px;}
   nav.links a{color:var(--ink-soft); font-size:14px; font-weight:500; position:relative; padding-bottom:4px; transition:color .18s var(--ease);}
   nav.links a:hover{color:var(--primary);}
@@ -76,7 +76,7 @@
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px; font-family:'Geist Mono',monospace; font-size:11px;
     letter-spacing:.12em; text-transform:uppercase; color:var(--accent-strong); background:var(--accent-soft);
-    padding:6px 12px; border-radius:999px; margin-bottom:20px; border:1px solid rgba(46,158,143,.22);
+    padding:6px 12px; border-radius:999px; margin-bottom:20px; border:1px solid rgba(31,142,125,.22);
   }
   h1.hero-title{
     font-family:'Geist',sans-serif; font-weight:700; letter-spacing:-.02em; color:var(--primary);
@@ -91,7 +91,7 @@
     box-shadow:var(--shadow-2); padding:28px; overflow:hidden;
   }
   .ecg-card::after{
-    content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(46,158,143,.10), transparent 55%);
+    content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(31,142,125,.12), transparent 55%);
     pointer-events:none;
   }
   .ecg-label{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
@@ -192,7 +192,7 @@
 <header class="top">
   <div class="top-inner">
     <a href="endoai-landing.html" class="brand">
-      <div class="brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div class="logo-box"><span class="material-symbols-outlined" style="font-size:22px;">cardiology</span></div>
       <span class="brand-name font-display">EndoAI</span>
     </a>
     <nav class="links">
@@ -284,11 +284,11 @@
           <span style="font-size:12px; color:var(--ink-faint);">Modified Duke criteria & ESC classifications</span>
         </div>
       </a>
-      <a href="endoai-assistant.html?q=Does+NICE+recommend+routine+antibiotic+prophylaxis+for+dental+procedures%3F" class="ask-card">
+      <a href="endoai-assistant.html?q=Why+did+NICE+move+away+from+routine+antibiotic+prophylaxis+for+infective+endocarditis%3F" class="ask-card">
         <div class="ask-icon"><span class="material-symbols-outlined">coronavirus</span></div>
         <div>
-          <h3>Does NICE recommend antibiotic prophylaxis?</h3>
-          <span style="font-size:12px; color:var(--ink-faint);">NICE recommendations for dental & surgical procedures</span>
+          <h3>Why did NICE move away from routine prophylaxis?</h3>
+          <span style="font-size:12px; color:var(--ink-faint);">NICE clinical decision, risk vs benefit analysis</span>
         </div>
       </a>
       <a href="endoai-assistant.html?q=What+are+the+indications+for+urgent+surgery+in+infective+endocarditis+according+to+ESC+guidelines%3F" class="ask-card">
@@ -374,7 +374,7 @@
 <footer>
   <div class="wrap footer-inner">
     <a href="endoai-landing.html" class="brand">
-      <div class="brand-mark" style="opacity:.9;"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div class="logo-box" style="opacity:.9;"><span class="material-symbols-outlined" style="font-size:22px;">cardiology</span></div>
       <span class="brand-name font-display" style="color:var(--ink-soft);">EndoAI</span>
     </a>
     <div class="footer-links">
