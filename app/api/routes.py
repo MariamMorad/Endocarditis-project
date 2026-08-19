@@ -1,4 +1,6 @@
+import os
 from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
+from fastapi.responses import FileResponse
 
 from app.models.schemas import AskRequest, AskResponse, HealthResponse, CollectionStatsResponse
 from app.core.pipeline import ClinicalRAGPipeline
@@ -32,6 +34,33 @@ def reindex(request: Request, background_tasks: BackgroundTasks):
 
     background_tasks.add_task(_rebuild)
     return {"status": "reindex_started"}
+
+
+@router.get("/documents", tags=["02 - Ingestion"], summary="List Available Medical Guidelines")
+def list_documents():
+    """Lists the clinical guideline PDFs currently available in the server."""
+    docs = []
+    for filename in settings.pdf_list:
+        path = os.path.join(settings.PDF_DIR, filename)
+        if os.path.exists(path):
+            docs.append({
+                "filename": filename,
+                "size_bytes": os.path.getsize(path),
+                "download_url": f"/api/v1/documents/{filename}",
+                "guideline": "ESC Guidelines 2023" if "ESC" in filename else "NICE Guidelines"
+            })
+    return {"documents": docs}
+
+
+@router.get("/documents/{filename}", tags=["02 - Ingestion"], summary="Download/View Raw Medical Guideline PDF")
+def get_document(filename: str):
+    """Serves the exact clinical guideline PDF file for in-browser inspection."""
+    if filename not in settings.pdf_list:
+        raise HTTPException(status_code=404, detail="Requested guideline PDF not found.")
+    path = os.path.join(settings.PDF_DIR, filename)
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="PDF file missing on server.")
+    return FileResponse(path, media_type="application/pdf", filename=filename)
 
 
 @router.post("/ask", response_model=AskResponse, tags=["03 - Query / RAG"], summary="Clinical Question Answering")

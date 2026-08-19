@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EndoAI — Evidence-Grounded Medical Intelligence</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#faf9f6;
+    --surface:#ffffff;
+    --surface-soft:#f2f4f1;
+    --ink:#152420;
+    --ink-soft:#5c6b64;
+    --ink-faint:#8a978f;
+    --primary:#0f3d3e;
+    --primary-deep:#0a2a2b;
+    --accent:#2e9e8f;
+    --accent-soft:#e2f2ee;
+    --accent-strong:#1f7a6d;
+    --line:#e6e8e2;
+    --warn:#b54b3c;
+    --warn-soft:#f7e6e1;
+    --shadow-1:0 1px 2px rgba(15,30,25,.04), 0 2px 8px rgba(15,30,25,.04);
+    --shadow-2:0 10px 30px rgba(15,30,25,.07);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased; padding-top:68px;
+  }
+  .font-display{font-family:'Geist',sans-serif;}
+  .font-mono{font-family:'Geist Mono',monospace; letter-spacing:.02em;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 24px;}
+  a{text-decoration:none;}
+
+  header.top{
+    position:fixed; top:0; left:0; right:0; z-index:50; height:68px;
+    background:rgba(250,249,246,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line); display:flex; align-items:center;
+  }
+  .top-inner{max-width:1200px; margin:0 auto; padding:0 24px; width:100%; display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .brand-mark{
+    width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+    background:#fff; border:1px solid var(--line); box-shadow:var(--shadow-1); padding:5px;
+  }
+  .brand-mark img{width:100%; height:100%; object-fit:contain;}
+  .brand-name{font-weight:700; font-size:17px; color:var(--primary); letter-spacing:-.01em;}
+  nav.links{display:none; align-items:center; gap:32px;}
+  nav.links a{color:var(--ink-soft); font-size:14px; font-weight:500; position:relative; padding-bottom:4px; transition:color .18s var(--ease);}
+  nav.links a:hover{color:var(--primary);}
+  nav.links a.active{color:var(--primary); font-weight:600;}
+  nav.links a.active::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--accent); border-radius:2px;}
+  
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:14px; font-weight:600;
+    padding:10px 18px; border-radius:11px; cursor:pointer; transition:transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+    border:1px solid transparent; text-decoration:none;
+  }
+  .btn-primary{background:var(--primary); color:#fff;}
+  .btn-primary:hover{background:var(--primary-deep); transform:translateY(-1px); box-shadow:var(--shadow-2);}
+  .btn-ghost{border-color:var(--line); color:var(--primary); background:var(--surface);}
+  .btn-ghost:hover{background:var(--surface-soft); transform:translateY(-1px);}
+
+  main{display:flex; flex-direction:column; gap:96px; padding:56px 0 96px;}
+
+  /* Hero */
+  .hero{display:flex; flex-direction:column-reverse; gap:44px; align-items:center;}
+  .hero-copy{flex:1;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-family:'Geist Mono',monospace; font-size:11px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--accent-strong); background:var(--accent-soft);
+    padding:6px 12px; border-radius:999px; margin-bottom:20px; border:1px solid rgba(46,158,143,.22);
+  }
+  h1.hero-title{
+    font-family:'Geist',sans-serif; font-weight:700; letter-spacing:-.02em; color:var(--primary);
+    font-size:clamp(32px,5vw,52px); line-height:1.08; margin:0 0 18px;
+  }
+  .hero-lede{font-size:17px; line-height:1.65; color:var(--ink-soft); max-width:560px; margin:0 0 30px;}
+  .hero-actions{display:flex; flex-wrap:wrap; gap:12px;}
+
+  .hero-visual{flex:1; width:100%; position:relative;}
+  .ecg-card{
+    position:relative; border-radius:22px; background:var(--surface); border:1px solid var(--line);
+    box-shadow:var(--shadow-2); padding:28px; overflow:hidden;
+  }
+  .ecg-card::after{
+    content:""; position:absolute; inset:0; background:radial-gradient(circle at 85% 15%, rgba(46,158,143,.10), transparent 55%);
+    pointer-events:none;
+  }
+  .ecg-label{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+  .ecg-tag{font-family:'Geist Mono',monospace; font-size:11px; color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase;}
+  .ecg-live{display:flex; align-items:center; gap:6px; font-size:11px; color:var(--accent-strong); font-weight:600;}
+  .dot-live{width:6px; height:6px; border-radius:50%; background:var(--accent-strong); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .ecg-svg{width:100%; height:auto; display:block;}
+  .ecg-path{stroke:var(--accent-strong); stroke-width:2.4; fill:none; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:900; stroke-dashoffset:900; animation:draw 3.2s var(--ease) forwards infinite;}
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  .ecg-foot{display:flex; gap:20px; margin-top:20px; padding-top:18px; border-top:1px solid var(--line);}
+  .ecg-stat b{display:block; font-family:'Geist',sans-serif; font-size:19px; color:var(--primary); font-weight:700;}
+  .ecg-stat span{font-size:11.5px; color:var(--ink-faint);}
+
+  /* How it works */
+  .section-head{text-align:center; max-width:640px; margin:0 auto 44px;}
+  .section-head h2{font-family:'Geist',sans-serif; font-size:clamp(24px,3vw,32px); font-weight:700; color:var(--primary); letter-spacing:-.01em; margin:0 0 12px;}
+  .section-head p{font-size:15px; color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  .flow{
+    background:linear-gradient(180deg,var(--surface),var(--surface-soft));
+    border:1px solid var(--line); border-radius:22px; padding:44px 32px;
+  }
+  .flow-grid{display:grid; grid-template-columns:1fr; gap:28px; position:relative;}
+  .flow-step{display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px;}
+  .flow-icon{
+    width:58px; height:58px; border-radius:16px; background:var(--surface); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--accent-strong); box-shadow:var(--shadow-1);
+  }
+  .flow-num{font-family:'Geist Mono',monospace; font-size:11px; color:var(--ink-faint); letter-spacing:.08em;}
+  .flow-step h3{font-family:'Geist',sans-serif; font-size:15px; font-weight:600; color:var(--primary); margin:0;}
+  .flow-step p{font-size:13.5px; color:var(--ink-soft); margin:0; max-width:260px; line-height:1.5;}
+
+  /* Ask */
+  .ask-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  .ask-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px;
+    display:flex; align-items:center; gap:16px; text-align:left; cursor:pointer; box-shadow:var(--shadow-1);
+    transition:transform .15s var(--ease), border-color .15s var(--ease), box-shadow .15s var(--ease);
+    text-decoration:none; color:inherit;
+  }
+  .ask-card:hover{transform:translateY(-2px); border-color:var(--accent); box-shadow:var(--shadow-2);}
+  .ask-icon{
+    width:42px; height:42px; border-radius:12px; background:var(--accent-soft); color:var(--accent-strong);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ask-card h3{margin:0; font-size:15px; font-weight:600; color:var(--primary);}
+
+  /* Bento */
+  .bento{display:grid; grid-template-columns:1fr; gap:18px;}
+  .bento-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:28px;
+    box-shadow:var(--shadow-1); display:flex; flex-direction:column; gap:10px;
+  }
+  .bento-icon{
+    width:44px; height:44px; border-radius:12px; background:var(--surface-soft); color:var(--primary);
+    display:flex; align-items:center; justify-content:center; margin-bottom:6px;
+  }
+  .bento-card h3{font-size:17px; font-weight:700; color:var(--primary); margin:0;}
+  .bento-card p{font-size:14px; color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  /* Guidelines Card */
+  .guideline-card{
+    background:linear-gradient(135deg, var(--surface) 0%, var(--surface-soft) 100%);
+    border:1px solid var(--line); border-radius:20px; padding:28px; display:flex;
+    justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .guideline-info h3{font-size:18px; font-weight:700; color:var(--primary); margin:0 0 6px;}
+  .guideline-info p{font-size:13.5px; color:var(--ink-soft); margin:0;}
+
+  /* Disclaimer Box */
+  .disclaimer-box{
+    background:#fffbf0; border:1px solid rgba(217,119,6,.25); border-radius:16px; padding:20px;
+    display:flex; gap:14px; align-items:flex-start; color:#92400e; font-size:13px; line-height:1.6;
+  }
+
+  /* Footer */
+  footer{border-top:1px solid var(--line); padding:40px 0; background:var(--surface);}
+  .footer-inner{display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;}
+  .footer-links{display:flex; gap:24px; font-size:13px;}
+  .footer-links a{color:var(--ink-soft); transition:color .15s;}
+  .footer-links a:hover{color:var(--primary);}
+  .footer-copy{font-size:12px; color:var(--ink-faint);}
+
+  @media (min-width:768px){
+    nav.links{display:flex;}
+    .hero{flex-direction:row;}
+    .flow-grid{grid-template-columns:repeat(3,1fr);}
+    .ask-grid{grid-template-columns:repeat(2,1fr);}
+    .bento{grid-template-columns:repeat(2,1fr);}
+    .footer-inner{flex-direction:row; justify-content:space-between; text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a href="endoai-landing.html" class="brand">
+      <div class="brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <span class="brand-name font-display">EndoAI</span>
+    </a>
+    <nav class="links">
+      <a href="#how-it-works" class="active">How It Works</a>
+      <a href="#ask-samples">Clinical Questions</a>
+      <a href="#guidelines">Medical Guidelines</a>
+      <a href="/docs" target="_blank">Swagger API</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="endoai-assistant.html" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">chat_bubble</span>Open Assistant</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="material-symbols-outlined" style="font-size:14px;">verified</span>Azure OpenAI o4-mini Grounded AI</span>
+      <h1 class="hero-title font-display">Understand endocarditis with clarity, not guesswork.</h1>
+      <p class="hero-lede">Ask complex clinical questions about infective endocarditis and get grounded, evidence-backed answers pulled directly from <strong>ESC 2023</strong> and <strong>NICE guidelines</strong> — with every claim traceable back to the page.</p>
+      <div class="hero-actions">
+        <a href="endoai-assistant.html" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">chat_bubble</span>Ask the AI Assistant</a>
+        <a href="#how-it-works" class="btn btn-ghost">Learn How It Works</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="ecg-card">
+        <div class="ecg-label">
+          <span class="ecg-tag font-mono">Live retrieval trace</span>
+          <span class="ecg-live"><span class="dot-live"></span>Azure Cloud Active</span>
+        </div>
+        <svg class="ecg-svg" viewbox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
+          <path class="ecg-path" d="M0 45 H60 L75 45 L85 15 L100 75 L112 45 L140 45 L150 30 L160 45 H400" pathlength="900"></path>
+        </svg>
+        <div class="ecg-foot">
+          <div class="ecg-stat"><b>841</b><span>guideline chunks</span></div>
+          <div class="ecg-stat"><b>PubMedBERT</b><span>dense embeddings</span></div>
+          <div class="ecg-stat"><b>100%</b><span>citation verified</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works">
+    <div class="section-head">
+      <h2 class="font-display">Clinical answers, grounded in official guidelines</h2>
+      <p>The assistant never hallucinates. It retrieves exact passages from verified ESC and NICE guidelines, uses Azure OpenAI o4-mini to reason, and verifies citations against source documents.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-grid">
+        <div class="flow-step">
+          <span class="flow-num font-mono">01</span>
+          <div class="flow-icon"><span class="material-symbols-outlined">help_outline</span></div>
+          <h3>Submit Clinical Query</h3>
+          <p>Submit questions on diagnosis, prophylaxis, surgery, or microbiology protocols.</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num font-mono">02</span>
+          <div class="flow-icon"><span class="material-symbols-outlined">manage_search</span></div>
+          <h3>Hybrid Vector & BM25 Search</h3>
+          <p>PubMedBERT dense vectors + BM25 keyword matching + CrossEncoder reranking.</p>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num font-mono">03</span>
+          <div class="flow-icon"><span class="material-symbols-outlined">fact_check</span></div>
+          <h3>Grounded Answer & Citations</h3>
+          <p>Get structured clinical recommendations with clickable page-level citations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sample Questions Section -->
+  <section id="ask-samples">
+    <div class="section-head" style="margin-bottom:28px;">
+      <h2 class="font-display">Explore Clinical Questions</h2>
+      <p>Click any question below to test the AI assistant instantly:</p>
+    </div>
+    <div class="ask-grid">
+      <a href="endoai-assistant.html?q=What+are+the+main+diagnostic+criteria+for+infective+endocarditis+according+to+ESC+guidelines%3F" class="ask-card">
+        <div class="ask-icon"><span class="material-symbols-outlined">medical_information</span></div>
+        <div>
+          <h3>What are the main diagnostic criteria?</h3>
+          <span style="font-size:12px; color:var(--ink-faint);">Modified Duke criteria & ESC classifications</span>
+        </div>
+      </a>
+      <a href="endoai-assistant.html?q=Does+NICE+recommend+routine+antibiotic+prophylaxis+for+dental+procedures%3F" class="ask-card">
+        <div class="ask-icon"><span class="material-symbols-outlined">coronavirus</span></div>
+        <div>
+          <h3>Does NICE recommend antibiotic prophylaxis?</h3>
+          <span style="font-size:12px; color:var(--ink-faint);">NICE recommendations for dental & surgical procedures</span>
+        </div>
+      </a>
+      <a href="endoai-assistant.html?q=What+are+the+indications+for+urgent+surgery+in+infective+endocarditis+according+to+ESC+guidelines%3F" class="ask-card">
+        <div class="ask-icon"><span class="material-symbols-outlined">stethoscope</span></div>
+        <div>
+          <h3>What are the indications for urgent surgery?</h3>
+          <span style="font-size:12px; color:var(--ink-faint);">Heart failure, uncontrolled infection & embolism risks</span>
+        </div>
+      </a>
+      <a href="endoai-assistant.html?q=What+are+the+recommended+blood+culture+sampling+protocols+for+suspected+endocarditis%3F" class="ask-card">
+        <div class="ask-icon"><span class="material-symbols-outlined">vaccines</span></div>
+        <div>
+          <h3>What are blood culture sampling protocols?</h3>
+          <span style="font-size:12px; color:var(--ink-faint);">Number of sets, bottle volumes, and aseptic technique</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Guidelines Access Section -->
+  <section id="guidelines">
+    <div class="section-head" style="margin-bottom:28px;">
+      <h2 class="font-display">Integrated Clinical Guideline PDFs</h2>
+      <p>Access the full original medical guidelines loaded into the server:</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div class="guideline-card">
+        <div class="guideline-info">
+          <h3>📄 ESC 2023 Guidelines for the Management of Endocarditis</h3>
+          <p>European Heart Journal (2023) — Complete 98-page clinical guideline covering diagnosis, surgery, imaging, and antimicrobials.</p>
+        </div>
+        <a href="/api/v1/documents/ESC.pdf" target="_blank" class="btn btn-primary">
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>View Full ESC PDF
+        </a>
+      </div>
+      <div class="guideline-card">
+        <div class="guideline-info">
+          <h3>📄 NICE Clinical Guideline [CG64]</h3>
+          <p>Prophylaxis against infective endocarditis in adults and children undergoing interventional procedures.</p>
+        </div>
+        <a href="/api/v1/documents/NICE.pdf" target="_blank" class="btn btn-primary">
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>View Full NICE PDF
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Bento -->
+  <section>
+    <div class="bento">
+      <div class="bento-card">
+        <div class="bento-icon"><span class="material-symbols-outlined">verified_user</span></div>
+        <h3 class="font-display">Source-Grounded Answers</h3>
+        <p>Every response is strictly grounded in verified clinical guidelines, eliminating AI hallucinations.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon"><span class="material-symbols-outlined">psychology</span></div>
+        <h3 class="font-display">Azure OpenAI o4-mini Reasoning</h3>
+        <p>Uses OpenAI's advanced reasoning model for clinical scope evaluation and structured JSON output.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon"><span class="material-symbols-outlined">format_list_numbered</span></div>
+        <h3 class="font-display">Clickable Page Citations</h3>
+        <p>Click any citation to inspect the exact passage and deep-link directly into the original PDF page.</p>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon"><span class="material-symbols-outlined">security</span></div>
+        <h3 class="font-display">Safety Refusal Guardrails</h3>
+        <p>If evidence is insufficient in the guidelines, the AI safely refuses to answer and points to nearby sections.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer Box -->
+  <section class="disclaimer-box">
+    <span class="material-symbols-outlined" style="font-size:24px;">info</span>
+    <p><strong>Medical Disclaimer:</strong> This AI assistant is intended for educational and clinical decision-support purposes only. It does not replace individualized professional medical judgment, diagnosis, or clinical consultation. Always verify claims against official guidelines.</p>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="endoai-landing.html" class="brand">
+      <div class="brand-mark" style="opacity:.9;"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <span class="brand-name font-display" style="color:var(--ink-soft);">EndoAI</span>
+    </a>
+    <div class="footer-links">
+      <a href="endoai-assistant.html">AI Assistant</a>
+      <a href="/docs" target="_blank">Swagger API</a>
+      <a href="/api/v1/documents/ESC.pdf" target="_blank">ESC.pdf</a>
+      <a href="/api/v1/documents/NICE.pdf" target="_blank">NICE.pdf</a>
+    </div>
+    <span class="footer-copy">© 2024 EndoAI Clinical Assistant — Powered by Azure OpenAI</span>
+  </div>
+</footer>
+
+</body>
+</html>

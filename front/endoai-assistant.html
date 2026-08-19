@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EndoAI — Clinical Assistant</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#faf9f6;
+    --surface:#ffffff;
+    --surface-soft:#f2f4f1;
+    --surface-sunk:#eef1ed;
+    --ink:#152420;
+    --ink-soft:#5c6b64;
+    --ink-faint:#8a978f;
+    --primary:#0f3d3e;
+    --primary-deep:#0a2a2b;
+    --accent:#2e9e8f;
+    --accent-soft:#e2f2ee;
+    --accent-strong:#1f7a6d;
+    --line:#e6e8e2;
+    --line-soft:#eef0eb;
+    --warn:#b54b3c;
+    --warn-soft:#f7e6e1;
+    --radius:16px;
+    --radius-sm:10px;
+    --shadow-1:0 1px 2px rgba(15,30,25,.04), 0 2px 8px rgba(15,30,25,.04);
+    --shadow-2:0 4px 16px rgba(15,30,25,.06), 0 1px 3px rgba(15,30,25,.06);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; height:100vh; overflow:hidden; display:flex;
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .font-display{font-family:'Geist',sans-serif;}
+  .font-mono{font-family:'Geist Mono','Geist',monospace; letter-spacing:.02em;}
+
+  .custom-scrollbar::-webkit-scrollbar{width:6px;}
+  .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
+  .custom-scrollbar::-webkit-scrollbar-thumb{background:var(--line); border-radius:20px;}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:var(--ink-faint);}
+
+  /* Mobile top bar */
+  .topbar{
+    display:none; position:fixed; top:0; left:0; right:0; z-index:50;
+    align-items:center; justify-content:space-between; height:60px;
+    padding:0 16px; background:var(--surface); border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    background:#fff; border:1px solid var(--line); flex-shrink:0; box-shadow:var(--shadow-1); padding:5px;
+  }
+  .brand-mark img{width:100%; height:100%; object-fit:contain;}
+  .brand-name{font-weight:700; font-size:16px; letter-spacing:-.01em; color:var(--primary);}
+  .icon-btn{
+    border:none; background:transparent; color:var(--ink-soft); cursor:pointer;
+    width:36px; height:36px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;
+    transition:background .18s var(--ease), color .18s var(--ease);
+  }
+  .icon-btn:hover{background:var(--surface-soft); color:var(--primary);}
+
+  /* Sidebar */
+  nav.sidenav{
+    display:none; flex-direction:column; position:fixed; left:0; top:0; height:100%; width:264px; z-index:40;
+    background:linear-gradient(180deg,var(--primary-deep),var(--primary) 60%);
+    border-right:1px solid rgba(255,255,255,.06);
+  }
+  .side-head{padding:24px 20px 18px; border-bottom:1px solid rgba(255,255,255,.08);}
+  .side-brand{display:flex; align-items:center; gap:12px; text-decoration:none;}
+  .side-brand-mark{
+    width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+    background:#fff; flex-shrink:0; padding:6px; box-shadow:var(--shadow-1);
+  }
+  .side-brand-mark img{width:100%; height:100%; object-fit:contain;}
+  .side-title{color:#fff; font-weight:700; font-size:17px; letter-spacing:-.01em;}
+  .side-sub{color:rgba(255,255,255,.5); font-size:11.5px; margin-top:1px;}
+  .new-consult{
+    margin-top:16px; width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:11px;
+    font-weight:600; font-size:13px; cursor:pointer; transition:background .18s var(--ease), transform .12s var(--ease);
+  }
+  .new-consult:hover{background:var(--accent-strong); transform:translateY(-1px);}
+  .new-consult:active{transform:translateY(0);}
+
+  .side-body{flex:1; overflow-y:auto; padding:18px 0;}
+  .side-label{
+    padding:0 20px 8px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.12em;
+    color:rgba(255,255,255,.35); text-transform:uppercase; margin-top:14px;
+  }
+  .side-label:first-child{margin-top:0;}
+  .side-link{
+    display:flex; align-items:center; gap:12px; padding:10px 20px; margin:1px 10px; border-radius:10px;
+    color:rgba(255,255,255,.7); text-decoration:none; font-size:13.5px; font-weight:500;
+    transition:background .18s var(--ease), color .18s var(--ease);
+  }
+  .side-link .material-symbols-outlined{font-size:19px;}
+  .side-link:hover{background:rgba(255,255,255,.08); color:#fff;}
+  .side-link.active{background:rgba(255,255,255,.12); color:#fff; box-shadow:inset 3px 0 0 var(--accent);}
+
+  .side-foot{padding:16px 20px; border-top:1px solid rgba(255,255,255,.08);}
+  .status-pill{display:flex; align-items:center; gap:9px; color:rgba(255,255,255,.7); font-size:12px;}
+  .status-dot{width:7px; height:7px; border-radius:50%; background:#4ade80; box-shadow:0 0 0 3px rgba(74,222,128,.18); animation:pulse 2.2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.45;}}
+
+  /* Main */
+  main.main{flex:1; display:flex; flex-direction:column; height:100%; position:relative; margin-left:0;}
+  header.chat-head{
+    height:64px; border-bottom:1px solid var(--line); background:var(--surface);
+    display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0;
+  }
+  .head-left{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .head-title{font-family:'Geist',sans-serif; font-weight:600; font-size:18px; letter-spacing:-.01em; color:var(--ink);}
+  .grounded-chip{
+    display:flex; align-items:center; gap:7px; padding:5px 11px; background:var(--accent-soft);
+    border:1px solid rgba(46,158,143,.25); border-radius:999px; font-size:11px; color:var(--accent-strong); font-weight:600;
+  }
+  .grounded-chip .status-dot{background:var(--accent-strong); box-shadow:0 0 0 3px rgba(31,122,109,.16);}
+
+  .pdf-quick-links{display:flex; align-items:center; gap:8px;}
+  .pdf-btn{
+    display:inline-flex; align-items:center; gap:5px; background:var(--surface-soft); border:1px solid var(--line);
+    padding:6px 12px; border-radius:8px; font-size:12px; font-weight:600; color:var(--primary); text-decoration:none;
+    transition:background .15s, border-color .15s;
+  }
+  .pdf-btn:hover{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong);}
+
+  .chat-scroll{flex:1; overflow-y:auto; padding:28px 24px 160px;}
+  .chat-inner{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:22px;}
+
+  .msg-row{display:flex; animation:rise .35s var(--ease) both;}
+  @keyframes rise{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .msg-user{justify-content:flex-end;}
+  .bubble-user{
+    background:var(--surface-soft); color:var(--ink); border-radius:18px 18px 4px 18px;
+    padding:13px 17px; max-width:78%; font-size:14.5px; line-height:1.55; box-shadow:var(--shadow-1);
+  }
+
+  .msg-ai{display:flex; gap:14px; max-width:92%; width:100%;}
+  .avatar{
+    width:34px; height:34px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:#fff; border:1px solid var(--line); box-shadow:var(--shadow-1); padding:5px;
+  }
+  .avatar img{width:100%; height:100%; object-fit:contain;}
+  .ai-card{
+    background:var(--surface); border-radius:6px 18px 18px 18px; padding:20px 22px 18px; flex:1;
+    box-shadow:var(--shadow-2); border:1px solid var(--line-soft); position:relative; overflow:hidden;
+  }
+  .ai-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--accent),var(--accent-strong));}
+  .ai-kicker{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; font-family:'Geist Mono',monospace;
+    font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-strong); font-weight:600;
+  }
+  .badge-conf{
+    padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  }
+  .badge-high{background:#dcfce7; color:#15803d;}
+  .badge-warn{background:var(--warn-soft); color:var(--warn);}
+  
+  .ai-body p{margin:0 0 12px; font-size:14.5px; line-height:1.65; color:var(--ink);}
+  .ai-body h4{font-family:'Geist',sans-serif; font-size:14.5px; font-weight:600; color:var(--primary); margin:14px 0 6px;}
+  .ai-body ul{margin:0 0 14px; padding-left:20px; display:flex; flex-direction:column; gap:6px;}
+  .ai-body li{font-size:14px; line-height:1.55; color:var(--ink-soft);}
+  .ai-body li strong{color:var(--ink);}
+
+  .refs{margin-top:16px; padding-top:14px; border-top:1px solid var(--line-soft);}
+  .refs-label{display:block; margin-bottom:9px; font-size:11.5px; color:var(--ink-faint); font-weight:600;}
+  .ref-chip{
+    display:inline-flex; align-items:center; gap:8px; background:var(--surface-soft); border:1px solid var(--line);
+    border-radius:9px; padding:7px 12px; margin:0 8px 8px 0; cursor:pointer;
+    transition:border-color .15s var(--ease), background .15s var(--ease);
+  }
+  .ref-chip:hover{background:var(--accent-soft); border-color:rgba(46,158,143,.35);}
+  .ref-num{
+    font-family:'Geist Mono',monospace; font-size:10px; color:var(--accent-strong); background:rgba(46,158,143,.14);
+    padding:2px 6px; border-radius:5px; font-weight:700;
+  }
+  .ref-text{font-size:12.5px; font-weight:500; color:var(--ink);}
+
+  .disclaimer-ai{
+    margin-top:12px; font-size:11px; color:var(--ink-faint); font-style:italic; border-top:1px dashed var(--line); padding-top:8px;
+  }
+
+  /* Refusal Card */
+  .refusal-card{background:#fff8f6; border:1px solid rgba(181,75,60,.2); border-radius:14px; padding:16px;}
+  .refusal-card h4{color:var(--warn); margin:0 0 6px; font-size:14px;}
+  .refusal-card p{color:var(--ink-soft); font-size:13px; line-height:1.5; margin:0 0 8px;}
+  .nearby-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .nearby-tag{background:var(--surface); border:1px solid var(--line); padding:4px 9px; border-radius:6px; font-size:11.5px; color:var(--ink);}
+
+  /* Loading animation */
+  .typing-card{display:flex; align-items:center; gap:8px; color:var(--ink-soft); font-size:13px;}
+  .typing-dots{display:flex; gap:4px;}
+  .typing-dots span{width:6px; height:6px; background:var(--accent); border-radius:50%; animation:bounce 1.4s infinite ease-in-out both;}
+  .typing-dots span:nth-child(1){animation-delay:-0.32s;}
+  .typing-dots span:nth-child(2){animation-delay:-0.16s;}
+  @keyframes bounce{0%,80%,100%{transform:scale(0);} 40%{transform:scale(1.0);}}
+
+  /* Composer */
+  .composer-wrap{
+    position:absolute; bottom:0; left:0; right:0; padding:28px 24px 22px;
+    background:linear-gradient(180deg, rgba(250,249,246,0) 0%, var(--bg) 45%);
+  }
+  .composer-inner{max-width:760px; margin:0 auto;}
+  .composer{
+    background:var(--surface); border-radius:18px; border:1px solid var(--line);
+    box-shadow:0 8px 24px rgba(15,30,25,.07); transition:border-color .18s var(--ease), box-shadow .18s var(--ease);
+  }
+  .composer:focus-within{border-color:var(--accent); box-shadow:0 8px 24px rgba(15,30,25,.09), 0 0 0 3px rgba(46,158,143,.13);}
+  .composer-row{display:flex; align-items:center; gap:6px; padding:8px;}
+  .composer textarea{
+    flex:1; border:none; outline:none; resize:none; background:transparent; padding:11px 12px;
+    font-family:'Inter',sans-serif; font-size:14.5px; color:var(--ink); line-height:1.5; max-height:120px;
+  }
+  .composer textarea::placeholder{color:var(--ink-faint);}
+  .send-btn{
+    width:38px; height:38px; border-radius:11px; border:none; background:var(--accent); color:#fff;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+    transition:background .18s var(--ease), transform .12s var(--ease);
+  }
+  .send-btn:hover{background:var(--accent-strong); transform:translateY(-1px) scale(1.03);}
+  .disclaimer{text-align:center; margin-top:10px; font-size:11px; color:var(--ink-faint);}
+
+  /* Source drawer */
+  aside.drawer{
+    display:none; flex-direction:column; width:360px; position:fixed; right:0; top:0; height:100%; z-index:100;
+    background:var(--surface); border-left:1px solid var(--line); box-shadow:-6px 0 24px rgba(15,30,25,.08);
+  }
+  aside.drawer.open{display:flex;}
+  .drawer-head{padding:20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;}
+  .drawer-title{font-family:'Geist',sans-serif; font-weight:600; font-size:15px; color:var(--ink);}
+  .drawer-body{padding:18px; flex:1; overflow-y:auto;}
+  .doc-tag{display:flex; align-items:center; gap:8px; color:var(--accent-strong); margin-bottom:4px;}
+  .doc-name{font-size:13.5px; font-weight:700; color:var(--ink);}
+  .doc-meta{font-size:11.5px; color:var(--ink-faint); margin-bottom:14px;}
+  .passage{background:var(--surface-sunk); border:1px solid var(--line); border-radius:13px; padding:15px; margin-bottom:16px;}
+  .passage-label{display:block; margin-bottom:8px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);}
+  .passage p{margin:0; font-size:13px; line-height:1.7; color:var(--ink-soft); font-style:italic;}
+  .open-pdf-action{
+    display:flex; align-items:center; justify-content:center; gap:8px; background:var(--primary); color:#fff;
+    padding:11px 16px; border-radius:10px; font-size:13px; font-weight:600; text-decoration:none;
+    transition:background .15s;
+  }
+  .open-pdf-action:hover{background:var(--primary-deep);}
+
+  @media (min-width:768px){
+    .topbar{display:none;}
+    nav.sidenav{display:flex;}
+    main.main{margin-left:264px;}
+  }
+  @media (max-width:767px){
+    .topbar{display:flex;}
+    main.main{padding-top:60px;}
+    .chat-scroll{padding-top:20px;}
+    .pdf-quick-links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+    <span class="brand-name font-display">EndoAI</span>
+  </div>
+  <a href="endoai-landing.html" class="icon-btn" title="Back to Home"><span class="material-symbols-outlined">home</span></a>
+</header>
+
+<nav class="sidenav">
+  <div class="side-head">
+    <a href="endoai-landing.html" class="side-brand">
+      <div class="side-brand-mark"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div>
+        <div class="side-title font-display">EndoAI</div>
+        <div class="side-sub">Clinical Assistant</div>
+      </div>
+    </a>
+    <button class="new-consult" onclick="resetChat()"><span class="material-symbols-outlined" style="font-size:17px;">add</span>New Consultation</button>
+  </div>
+
+  <div class="side-body custom-scrollbar">
+    <div class="side-label">Original Guidelines (PDF)</div>
+    <a class="side-link" href="/api/v1/documents/ESC.pdf" target="_blank" title="View Full ESC 2023 Guidelines PDF">
+      <span class="material-symbols-outlined" style="color:#f87171;">picture_as_pdf</span>ESC 2023 Guideline
+    </a>
+    <a class="side-link" href="/api/v1/documents/NICE.pdf" target="_blank" title="View Full NICE Guidelines PDF">
+      <span class="material-symbols-outlined" style="color:#f87171;">picture_as_pdf</span>NICE Guideline
+    </a>
+
+    <div class="side-label">Navigation & Admin</div>
+    <a class="side-link" href="endoai-landing.html"><span class="material-symbols-outlined">home</span>Home Page</a>
+    <a class="side-link" href="/docs" target="_blank"><span class="material-symbols-outlined">api</span>Swagger API Docs</a>
+    <a class="side-link" href="/api/v1/collections/stats" target="_blank"><span class="material-symbols-outlined">database</span>Chroma DB Stats</a>
+  </div>
+
+  <div class="side-foot">
+    <div class="status-pill"><span class="status-dot"></span>Azure o4-mini: online</div>
+  </div>
+</nav>
+
+<main class="main">
+  <header class="chat-head">
+    <div class="head-left">
+      <h2 class="head-title">Infective Endocarditis AI Assistant</h2>
+      <div class="grounded-chip"><span class="status-dot"></span>Grounded in ESC & NICE Guidelines</div>
+    </div>
+    <div class="pdf-quick-links">
+      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn" title="Open ESC Guidelines PDF"><span class="material-symbols-outlined" style="font-size:16px;">download</span>ESC.pdf</a>
+      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn" title="Open NICE Guidelines PDF"><span class="material-symbols-outlined" style="font-size:16px;">download</span>NICE.pdf</a>
+    </div>
+  </header>
+
+  <div class="chat-scroll custom-scrollbar" id="chatScroll">
+    <div class="chat-inner" id="chatContainer">
+
+      <!-- Welcome Message -->
+      <div class="msg-row">
+        <div class="msg-ai">
+          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="ai-card">
+            <div class="ai-kicker">Clinical AI Assistant</div>
+            <div class="ai-body">
+              <p>Welcome to <strong>EndoAI</strong>. I am your clinical reasoning assistant for Infective Endocarditis, grounded strictly in the <strong>ESC and NICE Clinical Guidelines</strong>.</p>
+              <p style="margin-bottom:0;">You can ask any clinical question, or directly access and download the raw guideline PDFs using the links in the sidebar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="composer-wrap">
+    <div class="composer-inner">
+      <div class="composer">
+        <div class="composer-row">
+          <textarea id="questionInput" placeholder="Ask anything about infective endocarditis (e.g. diagnostic criteria, dental prophylaxis, urgent surgery)..." rows="1" onkeydown="handleKey(event)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendQuestion()" title="Send Question"><span class="material-symbols-outlined" style="font-size:19px;">send</span></button>
+        </div>
+      </div>
+      <p class="disclaimer">Answers are strictly grounded in medical guidelines via Azure OpenAI o4-mini. Verify clinical information.</p>
+    </div>
+  </div>
+</main>
+
+<aside class="drawer" id="sourceDrawer">
+  <div class="drawer-head">
+    <span class="drawer-title">Source Reference</span>
+    <button class="icon-btn" onclick="closeDrawer()"><span class="material-symbols-outlined" style="font-size:19px;">close</span></button>
+  </div>
+  <div class="drawer-body custom-scrollbar" id="drawerBody">
+    <!-- Populated dynamically -->
+  </div>
+</aside>
+
+<script>
+// Use relative API URL so it automatically works on Azure and Localhost
+const API_BASE = window.location.origin.includes(':3000') 
+  ? "https://rag-backend-api.kindfield-2d55a574.germanywestcentral.azurecontainerapps.io"
+  : window.location.origin;
+
+const API_URL = `${API_BASE}/api/v1/ask`;
+let currentCitations = [];
+
+// Check for query param on load
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    document.getElementById('questionInput').value = q;
+    sendQuestion();
+  }
+});
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendQuestion();
+  }
+}
+
+function resetChat() {
+  window.location.href = 'endoai-assistant.html';
+}
+
+function closeDrawer() {
+  document.getElementById('sourceDrawer').classList.remove('open');
+}
+
+function openCitation(index) {
+  if (!currentCitations || !currentCitations[index]) return;
+  const cite = currentCitations[index];
+  const drawerBody = document.getElementById('drawerBody');
+  const pdfUrl = `${API_BASE}/api/v1/documents/${encodeURIComponent(cite.document || 'ESC.pdf')}#page=${cite.page || 1}`;
+
+  drawerBody.innerHTML = `
+    <div class="doc-tag">
+      <span class="material-symbols-outlined" style="font-size:17px; color:#f87171;">picture_as_pdf</span>
+      <span class="doc-name">${cite.document || 'Clinical Guideline'}</span>
+    </div>
+    <div class="doc-meta">Page ${cite.page || '—'} · Section: ${cite.section || 'General'} · Retrieval Score: ${(cite.retrieval_score ? cite.retrieval_score.toFixed(3) : '1.0')}</div>
+    <div class="passage">
+      <span class="passage-label">Retrieved Guideline Excerpt</span>
+      <p>"${cite.excerpt || 'Excerpt passage from guideline.'}"</p>
+    </div>
+    <a href="${pdfUrl}" target="_blank" class="open-pdf-action">
+      <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+      Open Full ${cite.document || 'Guideline'} (Page ${cite.page || 1})
+    </a>
+  `;
+  document.getElementById('sourceDrawer').classList.add('open');
+}
+
+async function sendQuestion() {
+  const input = document.getElementById('questionInput');
+  const query = input.value.trim();
+  if (!query) return;
+
+  input.value = '';
+  const container = document.getElementById('chatContainer');
+
+  // Append user message
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row msg-user';
+  userRow.innerHTML = `<div class="bubble-user">${escapeHtml(query)}</div>`;
+  container.appendChild(userRow);
+
+  // Append Loading placeholder
+  const loadingRow = document.createElement('div');
+  loadingRow.className = 'msg-row';
+  loadingRow.id = 'loadingMsg';
+  loadingRow.innerHTML = `
+    <div class="msg-ai">
+      <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+      <div class="ai-card">
+        <div class="typing-card">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+          <span>Retrieving guideline passages & reasoning with o4-mini...</span>
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(loadingRow);
+  scrollToBottom();
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({question: query, k: 8})
+    });
+
+    const data = await res.json();
+    loadingRow.remove();
+
+    const aiRow = document.createElement('div');
+    aiRow.className = 'msg-row';
+
+    if (data.refused) {
+      // Refusal Card (Safety & Out-of-scope guardrail)
+      aiRow.innerHTML = `
+        <div class="msg-ai">
+          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="ai-card">
+            <div class="ai-kicker">
+              <span>Safety & Evidence Guardrail</span>
+              <span class="badge-conf badge-warn">${escapeHtml(data.confidence || 'Insufficient Evidence')}</span>
+            </div>
+            <div class="refusal-card">
+              <h4>${escapeHtml(data.message || 'No direct evidence found in guidelines')}</h4>
+              <p><strong>Reason:</strong> ${escapeHtml(data.evidence_gap || 'Specific guidance is not explicitly stated in the retrieved sections.')}</p>
+              ${data.evidence_found_nearby && data.evidence_found_nearby.length ? `
+                <div style="font-size:11.5px; color:var(--ink-faint); margin-top:8px;">Related sections located in document:</div>
+                <div class="nearby-tags">
+                  ${data.evidence_found_nearby.map(t => `<span class="nearby-tag">${escapeHtml(t)}</span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      // Grounded Clinical Answer Card
+      currentCitations = data.citations || [];
+      const conf = data.confidence || 'High';
+      const confBadgeClass = conf.toLowerCase().includes('high') ? 'badge-high' : 'badge-warn';
+
+      let claimsHtml = '';
+      if (data.supporting_evidence && data.supporting_evidence.length) {
+        claimsHtml = `
+          <h4>Key Clinical Findings</h4>
+          <ul>
+            ${data.supporting_evidence.map(e => `<li>${escapeHtml(e.claim)}</li>`).join('')}
+          </ul>
+        `;
+      }
+
+      let citationsHtml = '';
+      if (currentCitations.length) {
+        citationsHtml = `
+          <div class="refs">
+            <span class="refs-label">Referenced Guideline Passages (Click to Inspect)</span>
+            ${currentCitations.map((c, idx) => `
+              <button class="ref-chip" onclick="openCitation(${idx})">
+                <span class="ref-num">${idx + 1}</span>
+                <span class="ref-text">${escapeHtml(c.document)} — Pg. ${c.page} (${escapeHtml(c.section)})</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      aiRow.innerHTML = `
+        <div class="msg-ai">
+          <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+          <div class="ai-card">
+            <div class="ai-kicker">
+              <span>Grounded Clinical Recommendation</span>
+              <span class="badge-conf ${confBadgeClass}">Confidence: ${escapeHtml(conf)}</span>
+            </div>
+            <div class="ai-body">
+              <p>${escapeHtml(data.recommendation)}</p>
+              ${claimsHtml}
+            </div>
+            ${citationsHtml}
+            ${data.safety_disclaimer ? `<div class="disclaimer-ai">${escapeHtml(data.safety_disclaimer)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    container.appendChild(aiRow);
+    scrollToBottom();
+
+  } catch (err) {
+    loadingRow.remove();
+    const errorRow = document.createElement('div');
+    errorRow.className = 'msg-row';
+    errorRow.innerHTML = `
+      <div class="msg-ai">
+        <div class="avatar"><img alt="EndoAI" src="logo-icon.png"/></div>
+        <div class="ai-card">
+          <div class="refusal-card">
+            <h4>Connection Error</h4>
+            <p>Could not connect to the Clinical RAG API. Please check your network connection.</p>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(errorRow);
+    scrollToBottom();
+  }
+}
+
+function scrollToBottom() {
+  const scroll = document.getElementById('chatScroll');
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+</script>
+</body>
+</html>

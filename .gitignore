@@ -1,7 +1,39 @@
+# Virtual Environment
 venv/
+.venv/
+env/
+
+# Python Cache
 __pycache__/
 *.pyc
+
+# Environment Variables
 .env
-chroma_db/
+.env.*
+
+# Pyinstaller / Executables
+*.exe
+
+# Build / Distribution
+.Python
+build/
+dist/
 *.egg-info/
+.eggs/
+
+# Deployment / Platform
+.azure/
+.github/workflows/*.yml
+*.json
+
+# OS Files
+.DS_Store
+
+# Large Data
+chroma_db/
+*.pt
+*.onnx
+*.safetensors
+*.jpg
+*.png
 .DS_Store

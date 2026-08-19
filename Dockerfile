@@ -34,9 +34,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy installed packages from builder
 COPY --from=builder /root/.local /root/.local
 
-# Copy application source code and PDF data
+# Copy application source code, PDF data, and web frontend
 COPY app ./app
 COPY data ./data
+COPY front ./front
 
 EXPOSE 8000
 

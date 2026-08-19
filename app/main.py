@@ -2,12 +2,16 @@
 Application entrypoint.
 Starts up FastAPI instantly in 0.1s and builds the RAG index in a background thread,
 preventing Azure Container Apps / Ingress 504 gateway timeouts.
+Mounts and serves the full EndoAI web frontend directly from Azure.
 """
+import os
 import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from app.core.indexing import rag_index
 from app.core.pipeline import ClinicalRAGPipeline
@@ -58,12 +62,30 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api/v1")
 
+# Mount frontend directory for static assets (images, html)
+FRONT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "front")
+if os.path.exists(FRONT_DIR):
+    app.mount("/front", StaticFiles(directory=FRONT_DIR, html=True), name="front")
 
-@app.get("/", tags=["01 - Health & Meta"], summary="Root Health & Documentation Link")
+
+@app.get("/", tags=["01 - Health & Meta"], summary="EndoAI Home Web Page")
 def root():
+    """Serves the interactive EndoAI Landing Page directly on Azure root URL."""
+    landing_path = os.path.join(FRONT_DIR, "endoai-landing.html")
+    if os.path.exists(landing_path):
+        return FileResponse(landing_path)
     return {
         "message": "Clinical RAG API is running.",
         "docs": "/docs",
         "openapi": "/openapi.json",
         "version": "1.0.0",
     }
+
+
+@app.get("/assistant", tags=["01 - Health & Meta"], summary="EndoAI Assistant Web App")
+def assistant():
+    """Serves the EndoAI Clinical Assistant directly on Azure."""
+    assistant_path = os.path.join(FRONT_DIR, "endoai-assistant.html")
+    if os.path.exists(assistant_path):
+        return FileResponse(assistant_path)
+    return FileResponse(os.path.join(FRONT_DIR, "index.html"))

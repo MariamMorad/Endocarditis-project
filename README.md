@@ -69,4 +69,5 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 1. Multi-stage Docker image built and pushed to **Azure Container Registry (ACR)**.
 2. Secrets securely stored in **Azure Key Vault**.
 3. Chroma DB persisted to an **Azure Files Share** mounted directly into Azure Container Apps.
-4. CI/CD automated via [.github/workflows/deploy.yml](file:///c:/Users/ahmed/.gemini/antigravity-ide/scratch/Endocarditis-project/.github/workflows/deploy.yml).
+4. CI/CD automated via [.github/workflows/deploy.yml](file:///c:/Us
+ers/ahmed/.gemini/antigravity-ide/scratch/Endocarditis-project/.github/workflows/deploy.yml).
