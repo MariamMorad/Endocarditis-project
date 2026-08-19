@@ -7,6 +7,7 @@ Application entrypoint. On server startup (lifespan), we:
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.indexing import rag_index
 from app.core.pipeline import ClinicalRAGPipeline
@@ -30,11 +31,31 @@ app = FastAPI(
                 "with hybrid retrieval + reranking + agentic evaluation + citation verification.",
     version="1.0.0",
     lifespan=lifespan,
+    openapi_tags=[
+        {"name": "01 - Health & Meta", "description": "Health check and service status endpoints"},
+        {"name": "02 - Ingestion", "description": "Guideline indexing and chunk ingestion endpoints"},
+        {"name": "03 - Query / RAG", "description": "Clinical question answering and reasoning endpoints"},
+        {"name": "04 - Vector Store Admin", "description": "Chroma DB and collection management endpoints"},
+    ],
 )
 
-app.include_router(router, prefix="/api/v1", tags=["clinical-rag"])
+# Enable CORS for external/frontend consumers
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(router, prefix="/api/v1")
 
 
-@app.get("/")
+@app.get("/", tags=["01 - Health & Meta"], summary="Root Health & Documentation Link")
 def root():
-    return {"message": "Clinical RAG API is running. Go to /docs to try the endpoints."}
+    return {
+        "message": "Clinical RAG API is running.",
+        "docs": "/docs",
+        "openapi": "/openapi.json",
+        "version": "1.0.0",
+    }

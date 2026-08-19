@@ -2,9 +2,7 @@
 Agent that reviews retrieval quality (scope + sufficiency) before we allow
 answer generation to proceed.
 """
-from google.genai import types
-
-from app.core.llm_client import client, GEMINI_MODEL
+from app.core.llm_client import client, OPENAI_MODEL
 from app.core.llm_schemas import RetrievalEvaluation
 
 EVALUATOR_SYSTEM_PROMPT = """You are a retrieval quality-control agent for a clinical decision-support RAG \
@@ -27,29 +25,32 @@ def evaluate_retrieval(query: str, retrieved: list) -> RetrievalEvaluation:
     context_block = "\n\n".join(
         f"[chunk_id: {r['doc'].metadata['chunk_id']}] "
         f"(source: {r['doc'].metadata['source']}, section: {r['doc'].metadata['section']}, "
-        f"score: {r['confidence']:.3f})\n{r['doc'].page_content}"
+        f"score: {r.get('rerank_score', r['confidence']):.3f})\n{r['doc'].page_content}"
         for r in retrieved
     )
     user_prompt = f"User question:\n{query}\n\nRetrieved chunks:\n{context_block}"
 
     try:
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=user_prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=EVALUATOR_SYSTEM_PROMPT,
-                response_mime_type="application/json",
-                response_schema=RetrievalEvaluation,
-                temperature=0.0,
-            ),
+        response = client.beta.chat.completions.parse(
+            model=OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": EVALUATOR_SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            response_format=RetrievalEvaluation,
         )
-        return response.parsed
-    except Exception:
+        choice = response.choices[0]
+        if choice.message.parsed is None:
+            raise ValueError(
+                f"Evaluator returned no parsed structured output: {choice.message.content}"
+            )
+        return choice.message.parsed
+    except Exception as e:
         # Fail-safe: if the evaluator call itself fails, treat as insufficient evidence
         return RetrievalEvaluation(
             in_scope=True,
             sufficient_evidence=False,
             relevant_chunk_ids=[],
-            evidence_gap="Evaluator call failed.",
+            evidence_gap=f"Evaluator error: {e}",
             reasoning="Exception during evaluation call.",
         )

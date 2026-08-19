@@ -1,15 +1,17 @@
 """
 Central application settings, loaded from a .env file.
 """
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    # ---- Gemini ----
-    GEMINI_API_KEY: str
-    GEMINI_MODEL: str = "gemini-2.0-flash"
+    # ---- Azure OpenAI ----
+    OPENAI_API_KEY: str
+    OPENAI_BASE_URL: str = "https://ah30309142502238-8748-resource.openai.azure.com/openai/v1"
+    OPENAI_MODEL: str = "o4-mini"
 
     # ---- PDFs ----
     PDF_DIR: str = "data/PDFs"
@@ -25,6 +27,7 @@ class Settings(BaseSettings):
 
     # ---- Vector store ----
     CHROMA_COLLECTION: str = "clinical_guidelines_v2"
+    CHROMA_PERSIST_DIR: Optional[str] = "data/chroma_db"
 
     @property
     def pdf_paths(self) -> list[str]:

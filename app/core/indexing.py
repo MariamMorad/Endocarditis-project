@@ -4,6 +4,7 @@ Everything lives inside one class (RAGIndex) instead of module-level globals, so
   - safely build/rebuild it from a /reindex endpoint
   - store it on app.state and inject it via Depends into routes
 """
+import os
 from dataclasses import dataclass, field
 
 from langchain_core.documents import Document
@@ -59,13 +60,24 @@ class RAGIndex:
         print("[RAGIndex] Loading embedding model...")
         self.embeddings = HuggingFaceEmbeddings(model_name=settings.EMBEDDING_MODEL)
 
-        print("[RAGIndex] Creating vector database...")
-        self.vector_store = Chroma.from_documents(
-            documents=self.langchain_docs,
-            embedding=self.embeddings,
-            collection_name=settings.CHROMA_COLLECTION,
-            collection_metadata={"hnsw:space": "cosine"},
-        )
+        print("[RAGIndex] Creating/Loading persistent vector database...")
+        persist_dir = settings.CHROMA_PERSIST_DIR
+        if persist_dir:
+            os.makedirs(persist_dir, exist_ok=True)
+            self.vector_store = Chroma.from_documents(
+                documents=self.langchain_docs,
+                embedding=self.embeddings,
+                collection_name=settings.CHROMA_COLLECTION,
+                collection_metadata={"hnsw:space": "cosine"},
+                persist_directory=persist_dir,
+            )
+        else:
+            self.vector_store = Chroma.from_documents(
+                documents=self.langchain_docs,
+                embedding=self.embeddings,
+                collection_name=settings.CHROMA_COLLECTION,
+                collection_metadata={"hnsw:space": "cosine"},
+            )
 
         print("[RAGIndex] Initializing BM25 retriever (tuned k1/b)...")
         self.bm25_retriever = BM25Retriever.from_documents(

@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 
 
 class AskRequest(BaseModel):
-    question: str = Field(..., min_length=3, description="The clinical question to ask")
-    k: int = Field(8, ge=1, le=20, description="Number of chunks to use for generation")
+    question: str = Field(..., min_length=3, description="The clinical question to ask", example="What is the recommended antibiotic prophylaxis for infective endocarditis according to NICE guidelines?")
+    k: int = Field(8, ge=1, le=20, description="Number of chunks to use for generation", example=8)
 
 
 class CitationOut(BaseModel):
@@ -43,3 +43,11 @@ class HealthResponse(BaseModel):
     status: str
     index_ready: bool
     total_chunks: int
+
+
+class CollectionStatsResponse(BaseModel):
+    collection_name: str
+    total_chunks: int
+    embedding_model: str
+    reranker_model: str
+    persist_dir: Optional[str] = None

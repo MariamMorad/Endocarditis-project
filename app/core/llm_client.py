@@ -1,9 +1,11 @@
 """
-Single shared Gemini client. The API key is read from .env via app.config.settings
-(no key is ever hardcoded here).
+Single shared Azure OpenAI client. Configured via app.config.settings.
 """
-from google import genai
+from openai import OpenAI
 from app.config import settings
 
-client = genai.Client(api_key=settings.GEMINI_API_KEY)
-GEMINI_MODEL = settings.GEMINI_MODEL
+client = OpenAI(
+    api_key=settings.OPENAI_API_KEY,
+    base_url=settings.OPENAI_BASE_URL,
+)
+OPENAI_MODEL = settings.OPENAI_MODEL
