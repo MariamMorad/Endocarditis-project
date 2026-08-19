@@ -30,8 +30,12 @@ class Settings(BaseSettings):
     CHROMA_PERSIST_DIR: Optional[str] = "data/chroma_db"
 
     @property
+    def pdf_list(self) -> list[str]:
+        return [name.strip() for name in self.PDF_FILES.split(",") if name.strip()]
+
+    @property
     def pdf_paths(self) -> list[str]:
-        return [f"{self.PDF_DIR.rstrip('/')}/{name.strip()}" for name in self.PDF_FILES.split(",")]
+        return [f"{self.PDF_DIR.rstrip('/')}/{name}" for name in self.pdf_list]
 
 
 settings = Settings()
