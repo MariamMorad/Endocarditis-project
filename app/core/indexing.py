@@ -30,17 +30,17 @@ class RAGIndex:
     ready: bool = False
 
     def build(self) -> None:
-        print("[RAGIndex] Extracting PDFs...")
+        print("[RAGIndex] Extracting PDFs...", flush=True)
         all_documents = extract_all_pdfs(settings.pdf_paths)
 
-        print("[RAGIndex] Chunking...")
+        print("[RAGIndex] Chunking...", flush=True)
         rag_chunks = chunk_merged_sections(
             all_documents,
             chunk_size=settings.CHUNK_SIZE,
             chunk_overlap=settings.CHUNK_OVERLAP,
         )
 
-        print("[RAGIndex] Deduplicating...")
+        print("[RAGIndex] Deduplicating...", flush=True)
         rag_chunks = deduplicate_chunks(rag_chunks)
 
         self.langchain_docs = [
@@ -55,12 +55,12 @@ class RAGIndex:
             )
             for chunk in rag_chunks
         ]
-        print(f"[RAGIndex] Loaded {len(self.langchain_docs)} deduplicated chunks.")
+        print(f"[RAGIndex] Loaded {len(self.langchain_docs)} deduplicated chunks.", flush=True)
 
-        print("[RAGIndex] Loading embedding model...")
+        print("[RAGIndex] Loading embedding model (PubMedBERT)...", flush=True)
         self.embeddings = HuggingFaceEmbeddings(model_name=settings.EMBEDDING_MODEL)
 
-        print("[RAGIndex] Creating/Loading persistent vector database...")
+        print("[RAGIndex] Creating/Loading persistent vector database...", flush=True)
         persist_dir = settings.CHROMA_PERSIST_DIR
         if persist_dir:
             os.makedirs(persist_dir, exist_ok=True)
@@ -79,24 +79,24 @@ class RAGIndex:
                 collection_metadata={"hnsw:space": "cosine"},
             )
 
-        print("[RAGIndex] Initializing BM25 retriever (tuned k1/b)...")
+        print("[RAGIndex] Initializing BM25 retriever (tuned k1/b)...", flush=True)
         self.bm25_retriever = BM25Retriever.from_documents(
             self.langchain_docs,
             bm25_params={"k1": 1.8, "b": 0.85},
         )
         self.bm25_retriever.k = 20
 
-        print("[RAGIndex] Initializing similarity-based vector retriever...")
+        print("[RAGIndex] Initializing similarity-based vector retriever...", flush=True)
         self.vector_retriever = self.vector_store.as_retriever(
             search_type="similarity",
             search_kwargs={"k": 20},
         )
 
-        print("[RAGIndex] Loading cross-encoder reranker...")
+        print("[RAGIndex] Loading cross-encoder reranker...", flush=True)
         self.reranker = CrossEncoder(settings.RERANKER_MODEL)
 
         self.ready = True
-        print("[RAGIndex] Pipeline ready.")
+        print("[RAGIndex] Pipeline ready.", flush=True)
 
     def get_similarity_scores(self, query: str, k: int, filter_: dict | None = None):
         """Cosine distance -> bounded similarity, computed manually instead of relying

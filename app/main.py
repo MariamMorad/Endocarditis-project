@@ -1,9 +1,9 @@
 """
-Application entrypoint. On server startup (lifespan), we:
-  1. Read PDFs -> extract -> chunk -> dedup
-  2. Build Chroma vector store + BM25 + Cross-Encoder reranker
-  3. Prepare ClinicalRAGPipeline and store it on app.state
+Application entrypoint.
+Starts up FastAPI instantly in 0.1s and builds the RAG index in a background thread,
+preventing Azure Container Apps / Ingress 504 gateway timeouts.
 """
+import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -14,15 +14,23 @@ from app.core.pipeline import ClinicalRAGPipeline
 from app.api.routes import router
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("[startup] Building RAG index...")
+def _build_rag_background(app: FastAPI):
+    print("[startup] Building RAG index in background thread...", flush=True)
     rag_index.build()
     app.state.rag_index = rag_index
     app.state.pipeline = ClinicalRAGPipeline(rag_index)
-    print("[startup] Application ready.")
+    print("[startup] Application and RAG Index ready for clinical queries!", flush=True)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.rag_index = rag_index
+    app.state.pipeline = None
+    # Start RAG initialization in background thread so server responds immediately
+    t = threading.Thread(target=_build_rag_background, args=(app,), daemon=True)
+    t.start()
     yield
-    print("[shutdown] Shutting down application.")
+    print("[shutdown] Shutting down application.", flush=True)
 
 
 app = FastAPI(
