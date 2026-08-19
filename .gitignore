@@ -24,7 +24,7 @@ dist/
 # Deployment / Platform
 .azure/
 .github/workflows/*.yml
-*.json
+!vercel.json
 
 # OS Files
 .DS_Store

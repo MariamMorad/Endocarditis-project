@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/front/index.html"
+    },
+    {
+      "source": "/assistant",
+      "destination": "/front/endoai-assistant.html"
+    },
+    {
+      "source": "/(logo.*)",
+      "destination": "/front/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/front/$1"
+    }
+  ]
+}
