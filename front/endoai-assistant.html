@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>EndoAI — Clinical Assistant</title>
+<title>EndoAI — Clinical Assistant & Prompt Wizard</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
@@ -92,11 +92,16 @@
   .side-link{
     display:flex; align-items:center; gap:12px; padding:10px 20px; margin:1px 10px; border-radius:10px;
     color:rgba(255,255,255,.75); text-decoration:none; font-size:13.5px; font-weight:500;
-    transition:background .18s var(--ease), color .18s var(--ease);
+    transition:background .18s var(--ease), color .18s var(--ease); cursor:pointer;
   }
   .side-link .material-symbols-outlined{font-size:19px;}
   .side-link:hover{background:rgba(255,255,255,.08); color:#fff;}
   .side-link.active{background:rgba(255,255,255,.14); color:#fff; box-shadow:inset 3px 0 0 var(--accent);}
+  .side-link.prompt-wizard-btn{
+    background:linear-gradient(90deg, rgba(31,142,125,.3), rgba(31,142,125,.1));
+    color:#5eead4; font-weight:600; border:1px dashed rgba(94,234,212,.3);
+  }
+  .side-link.prompt-wizard-btn:hover{background:rgba(31,142,125,.4); color:#fff;}
 
   .side-foot{padding:16px 20px; border-top:1px solid rgba(255,255,255,.08);}
   .status-pill{display:flex; align-items:center; gap:9px; color:rgba(255,255,255,.75); font-size:12px;}
@@ -116,6 +121,14 @@
     border:1px solid rgba(31,142,125,.25); border-radius:999px; font-size:11px; color:var(--accent-strong); font-weight:600;
   }
   .grounded-chip .status-dot{background:var(--accent-strong); box-shadow:0 0 0 3px rgba(19,101,88,.16);}
+
+  .header-actions{display:flex; align-items:center; gap:8px;}
+  .btn-wizard-head{
+    display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #e0f2fe, #dcfce7);
+    border:1px solid #7dd3fc; padding:6px 13px; border-radius:8px; font-size:12.5px; font-weight:700;
+    color:#0369a1; cursor:pointer; transition:transform .15s, box-shadow .15s;
+  }
+  .btn-wizard-head:hover{transform:translateY(-1px); box-shadow:0 2px 8px rgba(3,105,161,.15);}
 
   .pdf-quick-links{display:flex; align-items:center; gap:8px;}
   .pdf-btn{
@@ -188,12 +201,18 @@
     margin-top:14px; font-size:11px; color:var(--ink-faint); font-style:italic; border-top:1px dashed var(--line); padding-top:8px;
   }
 
-  /* Refusal Card */
+  /* Refusal Card with Fix Prompt Button */
   .refusal-card{background:#fff8f6; border:1px solid rgba(181,75,60,.25); border-radius:12px; padding:16px; margin-top:8px;}
   .refusal-card h4{color:var(--warn); margin:0 0 6px; font-size:14px; font-weight:700;}
   .refusal-card p{color:var(--ink-soft); font-size:13.5px; line-height:1.6; margin:0 0 8px;}
-  .nearby-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .nearby-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; margin-bottom:12px;}
   .nearby-tag{background:var(--surface); border:1px solid var(--line); padding:4px 10px; border-radius:6px; font-size:11.5px; color:var(--ink); font-weight:500;}
+  .fix-prompt-btn{
+    display:inline-flex; align-items:center; gap:6px; background:#0284c7; color:#fff; border:none;
+    padding:8px 14px; border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  .fix-prompt-btn:hover{background:#0369a1; transform:translateY(-1px);}
 
   /* Loading animation */
   .typing-card{display:flex; align-items:center; gap:10px; color:var(--ink-soft); font-size:13.5px; padding:6px 0;}
@@ -205,10 +224,10 @@
 
   /* Composer & Suggestion Chips */
   .composer-wrap{
-    position:absolute; bottom:0; left:0; right:0; padding:16px 24px 18px;
+    position:absolute; bottom:0; left:0; right:0; padding:14px 24px 16px;
     background:linear-gradient(180deg, rgba(248,250,249,0) 0%, var(--bg) 35%);
   }
-  .composer-inner{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
+  .composer-inner{max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:8px;}
   
   .suggestion-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:2px;}
   .sug-chip{
@@ -223,12 +242,18 @@
     box-shadow:0 6px 24px rgba(15,30,25,.07); transition:border-color .18s var(--ease), box-shadow .18s var(--ease);
   }
   .composer:focus-within{border-color:var(--accent); box-shadow:0 8px 24px rgba(15,30,25,.10), 0 0 0 3px rgba(31,142,125,.12);}
-  .composer-row{display:flex; align-items:center; gap:6px; padding:8px 10px;}
+  .composer-row{display:flex; align-items:center; gap:8px; padding:8px 10px;}
   .composer textarea{
     flex:1; border:none; outline:none; resize:none; background:transparent; padding:10px 10px;
     font-family:'Inter',sans-serif; font-size:14.5px; color:var(--ink); line-height:1.5; max-height:120px;
   }
   .composer textarea::placeholder{color:var(--ink-faint);}
+  .refine-btn{
+    display:inline-flex; align-items:center; gap:5px; height:38px; padding:0 12px; border-radius:11px;
+    border:1px solid #7dd3fc; background:#f0f9ff; color:#0284c7; font-size:12.5px; font-weight:700;
+    cursor:pointer; flex-shrink:0; transition:all .15s;
+  }
+  .refine-btn:hover{background:#e0f2fe; color:#0369a1; transform:translateY(-1px);}
   .send-btn{
     width:38px; height:38px; border-radius:11px; border:none; background:var(--accent); color:#fff;
     display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
@@ -259,6 +284,70 @@
   }
   .open-pdf-action:hover{background:var(--primary-deep);}
 
+  /* Prompt Wizard Modal / Dialog */
+  .modal-backdrop{
+    display:none; position:fixed; inset:0; background:rgba(15,36,32,.5); backdrop-filter:blur(4px);
+    z-index:200; align-items:center; justify-content:center; padding:16px; animation:fadeIn .2s ease;
+  }
+  .modal-backdrop.open{display:flex;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  
+  .wizard-card{
+    background:#ffffff; border-radius:20px; width:100%; max-width:680px; max-height:85vh;
+    display:flex; flex-direction:column; box-shadow:0 20px 50px rgba(15,30,25,.2);
+    border:1px solid var(--line); overflow:hidden; animation:scaleUp .25s var(--ease);
+  }
+  @keyframes scaleUp{from{transform:scale(.95); opacity:0;} to{transform:scale(1); opacity:1;}}
+
+  .wizard-head{
+    padding:20px 24px; background:linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color:#fff; display:flex; align-items:center; justify-content:space-between;
+  }
+  .wizard-head-title{font-size:18px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .wizard-head-sub{font-size:12px; color:rgba(255,255,255,.7); margin-top:2px;}
+  
+  .wizard-body{padding:24px; overflow-y:auto; flex:1;}
+  
+  .wizard-input-box{display:flex; gap:8px; margin-bottom:20px;}
+  .wizard-input{
+    flex:1; border:1px solid var(--line); border-radius:12px; padding:12px 16px;
+    font-size:14px; font-family:'Inter',sans-serif; outline:none;
+  }
+  .wizard-input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(31,142,125,.15);}
+  .wizard-refine-btn{
+    background:var(--accent); color:#fff; border:none; border-radius:12px; padding:0 18px;
+    font-weight:700; font-size:13.5px; cursor:pointer; display:flex; align-items:center; gap:6px;
+    transition:background .15s;
+  }
+  .wizard-refine-btn:hover{background:var(--accent-strong);}
+
+  .wizard-section-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-bottom:12px;}
+
+  .refined-list{display:flex; flex-direction:column; gap:10px; margin-bottom:24px;}
+  .refined-item{
+    background:var(--surface-soft); border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer;
+    transition:all .15s var(--ease);
+  }
+  .refined-item:hover{background:var(--accent-soft); border-color:var(--accent); transform:translateX(3px);}
+  .refined-text{font-size:14px; font-weight:600; color:var(--primary); line-height:1.45;}
+  .btn-use-prompt{
+    background:var(--primary); color:#fff; border:none; padding:7px 12px; border-radius:8px;
+    font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; flex-shrink:0;
+  }
+  .btn-use-prompt:hover{background:var(--primary-deep);}
+
+  .topics-grid{display:grid; grid-template-columns:1fr; gap:10px;}
+  @media(min-width:600px){.topics-grid{grid-template-columns:repeat(2,1fr);}}
+  
+  .topic-card{
+    border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface);
+    cursor:pointer; transition:all .15s; display:flex; flex-direction:column; gap:4px;
+  }
+  .topic-card:hover{border-color:var(--accent); background:var(--accent-soft);}
+  .topic-name{font-size:13px; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:6px;}
+  .topic-desc{font-size:11.5px; color:var(--ink-faint);}
+
   @media (min-width:768px){
     .topbar{display:none;}
     nav.sidenav{display:flex;}
@@ -279,7 +368,10 @@
     <div class="logo-box"><span class="material-symbols-outlined" style="font-size:20px;">cardiology</span></div>
     <span class="brand-name font-display">EndoAI</span>
   </a>
-  <a href="endoai-landing.html" class="icon-btn" title="Back to Home"><span class="material-symbols-outlined">home</span></a>
+  <div style="display:flex; gap:6px;">
+    <button class="icon-btn" onclick="openWizard()" title="Open Prompt Wizard" style="color:var(--accent);"><span class="material-symbols-outlined">auto_fix_high</span></button>
+    <a href="endoai-landing.html" class="icon-btn" title="Back to Home"><span class="material-symbols-outlined">home</span></a>
+  </div>
 </header>
 
 <nav class="sidenav">
@@ -295,6 +387,11 @@
   </div>
 
   <div class="side-body custom-scrollbar">
+    <div class="side-label">Prompt Helper</div>
+    <div class="side-link prompt-wizard-btn" onclick="openWizard()">
+      <span class="material-symbols-outlined">auto_fix_high</span>✨ Prompt Wizard
+    </div>
+
     <div class="side-label">Original Guidelines (PDF)</div>
     <a class="side-link doc-pdf-link" data-doc="ESC.pdf" href="/api/v1/documents/ESC.pdf" target="_blank" title="View Full ESC 2023 Guidelines PDF">
       <span class="material-symbols-outlined" style="color:#f87171;">picture_as_pdf</span>ESC 2023 Guideline
@@ -320,9 +417,14 @@
       <h2 class="head-title">Infective Endocarditis Assistant</h2>
       <div class="grounded-chip"><span class="status-dot"></span>Grounded in ESC & NICE 2023</div>
     </div>
-    <div class="pdf-quick-links">
-      <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="ESC.pdf" title="Open Full ESC Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>ESC.pdf</a>
-      <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="NICE.pdf" title="Open Full NICE Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>NICE.pdf</a>
+    <div class="header-actions">
+      <button class="btn-wizard-head" onclick="openWizard()" title="AI Prompt Refiner & Explorer">
+        <span class="material-symbols-outlined" style="font-size:18px;">auto_fix_high</span>Prompt Wizard
+      </button>
+      <div class="pdf-quick-links">
+        <a href="/api/v1/documents/ESC.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="ESC.pdf" title="Open Full ESC Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>ESC.pdf</a>
+        <a href="/api/v1/documents/NICE.pdf" target="_blank" class="pdf-btn doc-pdf-link" data-doc="NICE.pdf" title="Open Full NICE Guideline PDF"><span class="material-symbols-outlined" style="font-size:16px; color:#f87171;">picture_as_pdf</span>NICE.pdf</a>
+      </div>
     </div>
   </header>
 
@@ -338,9 +440,12 @@
             <div class="ai-recommendation">
               Welcome to <strong>EndoAI</strong>. I am your clinical reasoning assistant for Infective Endocarditis, grounded strictly in the official <strong>ESC 2023 and NICE Clinical Guidelines</strong>.
             </div>
-            <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.6;">
-              You can ask any question regarding diagnostic criteria, blood culture protocols, antibiotic prophylaxis, or urgent surgical indications. Every response includes page-level citations that link directly to the original PDF guidelines.
+            <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin-bottom:12px;">
+              💡 <strong>Tip for Best Results:</strong> Ask specific questions targeting diagnostic criteria, dental prophylaxis, surgical timing, or blood culture protocols. If you're unsure how to phrase your question without triggering <em>'insufficient evidence'</em>, click the <strong>Prompt Wizard</strong> button!
             </div>
+            <button class="fix-prompt-btn" onclick="openWizard()">
+              <span class="material-symbols-outlined" style="font-size:16px;">auto_fix_high</span>Open Prompt Doctor & Question Explorer
+            </button>
           </div>
         </div>
       </div>
@@ -368,7 +473,8 @@
 
       <div class="composer">
         <div class="composer-row">
-          <textarea id="questionInput" placeholder="Ask a clinical question about infective endocarditis..." rows="1" onkeydown="handleKey(event)"></textarea>
+          <textarea id="questionInput" placeholder="Ask a clinical question or type rough keywords and click Refine ✨..." rows="1" onkeydown="handleKey(event)"></textarea>
+          <button class="refine-btn" id="refineBtn" onclick="refineCurrentInput()" title="Optimize this prompt with AI"><span class="material-symbols-outlined" style="font-size:17px;">auto_fix_high</span>Refine</button>
           <button class="send-btn" id="sendBtn" onclick="sendQuestion()" title="Send Question"><span class="material-symbols-outlined" style="font-size:19px;">send</span></button>
         </div>
       </div>
@@ -387,6 +493,63 @@
   </div>
 </aside>
 
+<!-- Prompt Wizard Modal -->
+<div class="modal-backdrop" id="wizardModal" onclick="closeWizardOnBackdrop(event)">
+  <div class="wizard-card">
+    <div class="wizard-head">
+      <div>
+        <div class="wizard-head-title"><span class="material-symbols-outlined">auto_fix_high</span>EndoAI Prompt Wizard</div>
+        <div class="wizard-head-sub">Formulate high-retrieval clinical queries grounded in ESC & NICE guidelines</div>
+      </div>
+      <button class="icon-btn" onclick="closeWizard()" style="color:#fff;"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    
+    <div class="wizard-body custom-scrollbar">
+      <div class="wizard-section-title">✨ AI Prompt Doctor (Refine Rough Questions)</div>
+      <div class="wizard-input-box">
+        <input type="text" id="wizardInput" class="wizard-input" placeholder="Type rough idea (e.g. 'surgery indications', 'dental amoxicillin', 'tooth brushing')..." onkeydown="if(event.key==='Enter') executeRefinement()"/>
+        <button class="wizard-refine-btn" id="modalRefineBtn" onclick="executeRefinement()"><span class="material-symbols-outlined">sparkles</span>Refine</button>
+      </div>
+
+      <div id="refinementOutput" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="wizard-section-title" style="margin:0;">🎯 Optimized Clinical Questions:</span>
+          <span id="detectedIntentBadge" style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px;"></span>
+        </div>
+        <div class="refined-list" id="refinedPromptsList"></div>
+      </div>
+
+      <div class="wizard-section-title" style="margin-top:20px;">📚 High-Confidence Clinical Catalog (1-Click Topics)</div>
+      <div class="topics-grid">
+        <div class="topic-card" onclick="selectCatalogPrompt('What are the main diagnostic criteria for infective endocarditis according to ESC guidelines?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">stethoscope</span>Modified Duke Criteria</div>
+          <div class="topic-desc">Major vs Minor criteria, positive cultures, and imaging findings.</div>
+        </div>
+        <div class="topic-card" onclick="selectCatalogPrompt('Why might regular toothbrushing be considered a greater IE risk than a single dental procedure according to NICE?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">dentistry</span>NICE Dental & Toothbrushing</div>
+          <div class="topic-desc">Cumulative bacteremia rationale and non-routine prophylaxis stance.</div>
+        </div>
+        <div class="topic-card" onclick="selectCatalogPrompt('What are the indications for urgent surgery in infective endocarditis according to ESC guidelines?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">emergency</span>Urgent & Emergent Surgery</div>
+          <div class="topic-desc">Severe regurgitation, uncontrolled infection, and >10mm vegetations.</div>
+        </div>
+        <div class="topic-card" onclick="selectCatalogPrompt('What are the recommended blood culture sampling protocols for suspected infective endocarditis?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">science</span>Blood Culture Protocols</div>
+          <div class="topic-desc">Number of sets, sampling timing, and aseptic bottle collection.</div>
+        </div>
+        <div class="topic-card" onclick="selectCatalogPrompt('What is the role of transoesophageal echocardiography (TEE) vs transthoracic echocardiography (TTE) in suspected IE?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">monitor_heart</span>Echo Modalities (TTE vs TEE)</div>
+          <div class="topic-desc">First-line TTE indications and when TEE is mandatory.</div>
+        </div>
+        <div class="topic-card" onclick="selectCatalogPrompt('What antibiotic regimen is recommended for native valve endocarditis caused by staphylococci in non-allergic patients?')">
+          <div class="topic-name"><span class="material-symbols-outlined" style="font-size:17px; color:var(--accent);">medication</span>Antimicrobial Regimens</div>
+          <div class="topic-desc">Empirical and targeted therapies for NVE vs PVE.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // Universal API Base calculation: works when deployed on Azure Container Apps or when run locally
 const isLocalStaticPort = window.location.port === '3000';
@@ -395,6 +558,7 @@ const API_BASE = isLocalStaticPort
   : window.location.origin;
 
 const API_URL = `${API_BASE}/api/v1/ask`;
+const REFINE_URL = `${API_BASE}/api/v1/refine-prompt`;
 let currentCitations = [];
 
 // Ensure all document and swagger links point to the active backend host
@@ -463,6 +627,89 @@ function openCitation(index) {
   document.getElementById('sourceDrawer').classList.add('open');
 }
 
+/* Modal Wizard Functions */
+function openWizard(prefillQuery = '') {
+  const wizard = document.getElementById('wizardModal');
+  wizard.classList.add('open');
+  const input = document.getElementById('wizardInput');
+  if (prefillQuery) {
+    input.value = prefillQuery;
+    executeRefinement();
+  } else if (document.getElementById('questionInput').value.trim()) {
+    input.value = document.getElementById('questionInput').value.trim();
+    executeRefinement();
+  }
+  input.focus();
+}
+
+function closeWizard() {
+  document.getElementById('wizardModal').classList.remove('open');
+}
+
+function closeWizardOnBackdrop(e) {
+  if (e.target.id === 'wizardModal') {
+    closeWizard();
+  }
+}
+
+function refineCurrentInput() {
+  const val = document.getElementById('questionInput').value.trim();
+  openWizard(val);
+}
+
+async function executeRefinement() {
+  const input = document.getElementById('wizardInput');
+  const query = input.value.trim();
+  const outputDiv = document.getElementById('refinementOutput');
+  const list = document.getElementById('refinedPromptsList');
+  const badge = document.getElementById('detectedIntentBadge');
+  const btn = document.getElementById('modalRefineBtn');
+
+  btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 1s infinite linear;">refresh</span>Refining...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(REFINE_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({query: query || "clinical guidelines"})
+    });
+    const data = await res.json();
+
+    badge.textContent = `${data.detected_intent || 'Clinical Query'} (${data.target_guideline || 'ESC / NICE'})`;
+    list.innerHTML = (data.refined_prompts || []).map(p => `
+      <div class="refined-item" onclick="selectCatalogPrompt('${escapeJs(p)}')">
+        <span class="refined-text">${escapeHtml(p)}</span>
+        <button class="btn-use-prompt">Ask This →</button>
+      </div>
+    `).join('');
+
+    outputDiv.style.display = 'block';
+  } catch (err) {
+    // Fallback if network offline
+    list.innerHTML = `
+      <div class="refined-item" onclick="selectCatalogPrompt('What are the main diagnostic criteria for infective endocarditis according to ESC guidelines?')">
+        <span class="refined-text">What are the main diagnostic criteria for infective endocarditis according to ESC guidelines?</span>
+        <button class="btn-use-prompt">Ask This →</button>
+      </div>
+      <div class="refined-item" onclick="selectCatalogPrompt('Why did NICE move away from routine antibiotic prophylaxis for infective endocarditis?')">
+        <span class="refined-text">Why did NICE move away from routine antibiotic prophylaxis for infective endocarditis?</span>
+        <button class="btn-use-prompt">Ask This →</button>
+      </div>
+    `;
+    outputDiv.style.display = 'block';
+  } finally {
+    btn.innerHTML = '<span class="material-symbols-outlined">sparkles</span>Refine';
+    btn.disabled = false;
+  }
+}
+
+function selectCatalogPrompt(promptText) {
+  closeWizard();
+  document.getElementById('questionInput').value = promptText;
+  sendQuestion();
+}
+
 async function sendQuestion() {
   const input = document.getElementById('questionInput');
   const query = input.value.trim();
@@ -509,7 +756,7 @@ async function sendQuestion() {
     aiRow.className = 'msg-row';
 
     if (data.refused) {
-      // Refusal Card (Safety & Out-of-scope guardrail)
+      // Refusal Card with "Fix Prompt" action
       aiRow.innerHTML = `
         <div class="msg-ai">
           <div class="avatar"><span class="material-symbols-outlined" style="font-size:20px;">smart_toy</span></div>
@@ -527,6 +774,9 @@ async function sendQuestion() {
                   ${data.evidence_found_nearby.map(t => `<span class="nearby-tag">${escapeHtml(t)}</span>`).join('')}
                 </div>
               ` : ''}
+              <button class="fix-prompt-btn" onclick="openWizard('${escapeJs(query)}')">
+                <span class="material-symbols-outlined" style="font-size:16px;">auto_fix_high</span>🪄 Fix & Rephrase this Prompt with AI
+              </button>
             </div>
           </div>
         </div>
@@ -617,6 +867,15 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function escapeJs(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n");
 }
 </script>
 </body>

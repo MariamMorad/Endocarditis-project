@@ -1,12 +1,18 @@
 import os
 from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, Field
 
 from app.models.schemas import AskRequest, AskResponse, HealthResponse, CollectionStatsResponse
 from app.core.pipeline import ClinicalRAGPipeline
+from app.core.prompt_refiner import refine_user_prompt, RefinedPromptResult
 from app.config import settings
 
 router = APIRouter()
+
+
+class PromptRefineRequest(BaseModel):
+    query: str = Field(..., example="tooth brushing and endocarditis")
 
 
 def get_pipeline(request: Request) -> ClinicalRAGPipeline:
@@ -69,6 +75,12 @@ def ask(payload: AskRequest, request: Request):
     pipeline = get_pipeline(request)
     result = pipeline.answer(payload.question, k=payload.k)
     return result
+
+
+@router.post("/refine-prompt", response_model=RefinedPromptResult, tags=["03 - Query / RAG"], summary="AI Prompt Refiner & Optimizer")
+def refine_prompt_endpoint(payload: PromptRefineRequest):
+    """Refines rough, colloquial or vague clinical inquiries into optimized prompts for ESC and NICE guidelines."""
+    return refine_user_prompt(payload.query)
 
 
 @router.get("/collections/stats", response_model=CollectionStatsResponse, tags=["04 - Vector Store Admin"], summary="Vector Store & Collection Info")
