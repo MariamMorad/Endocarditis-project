@@ -58,7 +58,7 @@ class RetrievalEngine:
     def __init__(self, index: RAGIndex):
         self.index = index
 
-    def retrieve_fused(self, query: str, k: int = 10, pool_k: int = 20,
+    def retrieve_fused(self, query: str, k: int = 14, pool_k: int = 45,
                         use_source_filter: bool = True, use_bm25_expansion: bool = True):
         bm25_query = expand_for_bm25(query) if use_bm25_expansion else query
         bm25_results = self.index.bm25_retriever.invoke(bm25_query)
@@ -78,16 +78,17 @@ class RetrievalEngine:
             in_vector = chunk_id in vector_scores
             conf = compute_confidence(
                 query, doc.page_content,
-                bm25_rank=bm25_ids.get(chunk_id, 20),
+                bm25_rank=bm25_ids.get(chunk_id, 45),
                 vector_similarity=vector_scores.get(chunk_id, 0.0),
                 in_bm25=in_bm25, in_vector=in_vector,
+                bm25_total=45,
             )
             scored.append({"doc": doc, "confidence": conf})
 
         scored.sort(key=lambda x: (x["confidence"], x["doc"].metadata.get("chunk_id", "")), reverse=True)
         return scored[:pool_k]
 
-    def retrieve_with_rerank(self, query: str, k: int = 10, pool_k: int = 20,
+    def retrieve_with_rerank(self, query: str, k: int = 14, pool_k: int = 45,
                               use_source_filter: bool = True, use_bm25_expansion: bool = True):
         candidates = self.retrieve_fused(
             query, k=pool_k, pool_k=pool_k,

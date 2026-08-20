@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 class AskRequest(BaseModel):
     question: str = Field(..., min_length=3, description="The clinical question to ask", example="What is the recommended antibiotic prophylaxis for infective endocarditis according to NICE guidelines?")
-    k: int = Field(8, ge=1, le=20, description="Number of chunks to use for generation", example=8)
+    k: int = Field(14, ge=1, le=25, description="Number of chunks to use for generation", example=14)
 
 
 class CitationOut(BaseModel):

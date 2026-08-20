@@ -16,7 +16,7 @@ class ClinicalRAGPipeline:
         self.index = index
         self.retriever = RetrievalEngine(index)
 
-    def answer(self, query: str, k: int = 8) -> dict:
+    def answer(self, query: str, k: int = 14) -> dict:
         # 1. Retrieval (hybrid fusion + cross-encoder rerank)
         retrieved = self.retriever.retrieve_with_rerank(query, k=k)
 
