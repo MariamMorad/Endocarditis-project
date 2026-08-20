@@ -78,9 +78,10 @@ def ask(payload: AskRequest, request: Request):
 
 
 @router.post("/refine-prompt", response_model=RefinedPromptResult, tags=["03 - Query / RAG"], summary="AI Prompt Refiner & Optimizer")
-def refine_prompt_endpoint(payload: PromptRefineRequest):
-    """Refines rough, colloquial or vague clinical inquiries into optimized prompts for ESC and NICE guidelines."""
-    return refine_user_prompt(payload.query)
+def refine_prompt_endpoint(payload: PromptRefineRequest, request: Request):
+    """Refines rough clinical queries into chunk-grounded prompts. Uses actual index sections to guarantee evidence retrieval."""
+    rag_index = getattr(request.app.state, "rag_index", None)
+    return refine_user_prompt(payload.query, rag_index=rag_index)
 
 
 @router.get("/collections/stats", response_model=CollectionStatsResponse, tags=["04 - Vector Store Admin"], summary="Vector Store & Collection Info")
