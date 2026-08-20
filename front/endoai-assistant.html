@@ -746,7 +746,7 @@ async function sendQuestion() {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({question: query, k: 8})
+      body: JSON.stringify({question: query, k: 14})
     });
 
     const data = await res.json();
